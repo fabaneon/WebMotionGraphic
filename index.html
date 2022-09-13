@@ -3,21 +3,23 @@
   <head>
     <meta charset="utf-8">
     <title>p5.js</title>
-    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.2/lib/p5.min.js"></script>
   </head>
+  <style>
+    header{
+      background-color: black;
+      color: white;
+      font-size: 24px;
+      font-style: oblique;
+      margin:10px;
+    }
+  </style>
   <body>
-    <script>
-      function setup(){
-        createCanvas(1920, 1080);
-        background('gray');
-      }
-      function draw(){
-        background(220);
-        for(var i=0;i<10; i++){
-          circle(i*100, i*100, 200);
-          circle(i*100, i*100, 100);
-        }
-      }
+    <header>
+      F5로 새로고침할때마다 새로운 색깔의 효과가 나타납니다.
+    </header>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.2/lib/p5.min.js"></script>
+    <script src="script.js">
+
     </script>
   </body>
 </html>
