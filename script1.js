@@ -10,11 +10,11 @@ var b2
 
 function setup(){
   createCanvas(windowWidth, windowHeight)
-  background(30)
+  background(0)
   angleMode(DEGREES)
   noiseDetail(1)
 
-  var density = 30
+  var density = 200
   var space = width / density
 
   for (var x = 0; x < width; x+= space){
@@ -50,7 +50,7 @@ function draw(){
       var r = map(points[i].x, 0, width, r1, r2)
       var g = map(points[i].y, 0, height, g1, g2)
       var b = map(points[i].x, 0, width, b1, b2)
-      var alpha = map(dist(width / 2, height / 2, points[i].x, points[i].y), 0, 500, 255, 0)
+      var alpha = map(dist(width / 2, height / 2, points[i].x, points[i].y), 0, 400, 255, 0)
 
       fill(r, g, b, alpha)
 
@@ -58,7 +58,7 @@ function draw(){
       points[i].add(createVector(cos(angle), sin(angle)))
 
       if ( dist(
-        width / 2, height / 2, points[i].x, points[i].y) < 500) {
+        width / 2, height / 2, points[i].x, points[i].y) < 400) {
         ellipse(points[i].x, points[i].y, 5)
       }
   }
