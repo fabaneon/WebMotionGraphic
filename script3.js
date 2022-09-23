@@ -1,5 +1,10 @@
 var list = [];
-
+var r1 = null;
+var r2 = null;
+var g1 = null;
+var g2 = null;
+var b1 = null;
+var b2 = null;
 
 
 function setup(){
@@ -12,12 +17,7 @@ function setup(){
 function draw() {
   var density = 10;
   var space = width / density
-  var r1 = random(255)
-  var r2 = random(255)
-  var g1 = random(255)
-  var g2 = random(255)
-  var b1 = random(255)
-  var b2 = random(255)
+
   var p = null;
 
   var i = 0;
@@ -35,7 +35,7 @@ function draw() {
       var g = map(list[i].y, 0, height, g1, g2)
       var b = map(list[i].x, 0, width, b1, b2)
 
-      drawArrow(list[i], v1.limit(80), r,g,b);
+      drawArrow(list[i], v1.limit(60), r,g,b);
 
       i++;
     }
@@ -52,16 +52,29 @@ function drawArrow(base, vec, r,g,b){
  translate(base.x, base.y);
  line(0, 0, vec.x, vec.y);
  rotate(vec.heading());
- let arrowSize = 20;
+ let arrowSize = 30;
  translate(vec.mag() - arrowSize, 0);
+
  triangle(0, arrowSize / 2, 0, -arrowSize / 2, arrowSize, 0);
  pop();
 }
 function mouseMoved(){
+  r1 = random(255)
+  r2 = random(255)
+  g1 = random(255)
+  g2 = random(255)
+  b1 = random(255)
+  b2 = random(255)
   clear()
   background(150)
 }
 function mouseDragged(){
+  r1 = random(150)
+  r2 = random(150)
+  g1 = random(150)
+  g2 = random(150)
+  b1 = random(150)
+  b2 = random(150)
   clear
   background(150)
 }
