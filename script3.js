@@ -44,3 +44,7 @@ function mouseMoved(){
   clear
   background(150)
 }
+function mouseDragged(){
+  clear
+  background(150)
+}
