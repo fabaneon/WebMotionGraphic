@@ -1,4 +1,5 @@
 var list = [];
+
 var r1 = null;
 var r2 = null;
 var g1 = null;
@@ -7,9 +8,10 @@ var b1 = null;
 var b2 = null;
 
 
+
 function setup(){
   createCanvas(windowWidth, windowWidth);
-  background(150);
+  background(122 , 5 , 132);
   stroke(255, 0 ,255);
 
 }
@@ -26,7 +28,6 @@ function draw() {
     for(var y = 0; y < height; y += space){
 
 
-      console.log(x + " : " + y);
       ellipse(mouseX, mouseY, 10, 10)
       var v1 = createVector(mouseX-x, mouseY-y);
       var v2 = createVector(x, y);
@@ -35,7 +36,7 @@ function draw() {
       var g = map(list[i].y, 0, height, g1, g2)
       var b = map(list[i].x, 0, width, b1, b2)
 
-      drawArrow(list[i], v1.limit(60), r,g,b);
+      drawArrow(list[i], v1.limit(100), r,g,b);
 
       i++;
     }
@@ -59,22 +60,25 @@ function drawArrow(base, vec, r,g,b){
  pop();
 }
 function mouseMoved(){
-  r1 = random(255)
-  r2 = random(255)
-  g1 = random(255)
-  g2 = random(255)
-  b1 = random(255)
-  b2 = random(255)
+
+  r1 = random(255);
+  r2 = random(255);
+  g1 = random(255);
+  g2 = random(255);
+  b1 = random(255);
+  b2 = random(255);
+
   clear()
-  background(150)
+  background(122 , 5 , 132)
 }
 function mouseDragged(){
-  r1 = random(150)
-  r2 = random(150)
-  g1 = random(150)
-  g2 = random(150)
-  b1 = random(150)
-  b2 = random(150)
-  clear
-  background(150)
+
+  var r1 = random(255);
+  var r2 = random(255);
+  var g1 = random(255);
+  var g2 = random(255);
+  var b1 = random(255);
+  var b2 = random(255);
+  clear()
+  background(122 , 5 , 132)
 }
