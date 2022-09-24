@@ -10,7 +10,7 @@ var b2 = null;
 
 
 function setup(){
-  createCanvas(windowWidth, windowWidth);
+  createCanvas(windowWidth, windowHeight);
 
   stroke(255, 0 ,255);
 
@@ -18,7 +18,7 @@ function setup(){
 
 function draw() {
     background(122 , 5 , 132);
-  var density = 10;
+  var density = 5;
   var space = width / density
 
   var p = null;
