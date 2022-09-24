@@ -11,12 +11,13 @@ var b2 = null;
 
 function setup(){
   createCanvas(windowWidth, windowWidth);
-  background(122 , 5 , 132);
+
   stroke(255, 0 ,255);
 
 }
 
 function draw() {
+    background(122 , 5 , 132);
   var density = 10;
   var space = width / density
 
@@ -68,8 +69,7 @@ function mouseMoved(){
   b1 = random(255);
   b2 = random(255);
 
-  clear()
-  background(122 , 5 , 132)
+
 }
 function mouseDragged(){
 
@@ -79,6 +79,5 @@ function mouseDragged(){
   var g2 = random(255);
   var b1 = random(255);
   var b2 = random(255);
-  clear()
-  background(122 , 5 , 132)
+
 }
