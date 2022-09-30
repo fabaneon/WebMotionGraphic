@@ -26,20 +26,30 @@
      이를 이용한 곡선그리기
     </header>
     <article>
-      빨간색 점 = A , 노란색 점 = B , 파란색 점 = C <br><br>
-      녹색 점 = AB를 지나는 점 I , 하늘색 점 = BC를 지나는 점 J <br><br>
-      핑크색 점 = 선분 IJ를 지나는 점 P | 매개변수 t = 변화값. <br><br>
+      빨간색 점 = A , 노란색 점 = B , 파란색 점 = C <br>
+      녹색 점 = AB를 지나는 점 I , 하늘색 점 = BC를 지나는 점 J <br>
+      핑크색 점 = 선분 IJ를 지나는 점 P | 매개변수 t = 변화값. <br>
       기본 공식 <li>
         ((1-t)*A)+(t*B) = (AB 선을 지나는 점) ["t"값에 따라 이동함]
       </li><br>
         위 공식의 경우 AB의 길이를 1이라 가정할때 이다.<br><br>
       아래 예제 전체 공식
       <pre>
-        ((1-t)*A)+(t*B) = I
-        ((1-t)*B)+(t*C) = J
-        따라서 ((1-t)*I)+(t*J) = 점 P의 위치
+        lengthAB = (Bx-Ax)+(By-Ay)
+        lengthBC = (Cx-Bx)+(Cy-By)
+
+        ((lengthAB-t)*A)+(t*B) = I
+        ((lengthBC-t)*B)+(t*C) = J
+
+        lengthIJ = (Jx-Ix)+(Jy-Iy)
+
+        따라서 ((lengthIJ-t)*I)+(t*J) = 점 P의 위치
+
+        이 내용을 t의 값을 계속 더해주며 반복 출력하면
+        같은 속도로 움직이는 점I, 점 J와
+        이 둘을 이은 선분 IJ 위의 점 P가 생성된다.
       </pre>
-      이 내용을 t의 값을 계속 더해주며 반복 출력하면 된다.
+
     </article>
     <script src="https://cdn.jsdelivr.net/npm/p5@1.4.2/lib/p5.min.js"></script>
     <script src="script6.js">
