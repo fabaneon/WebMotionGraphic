@@ -4,7 +4,7 @@ function setup(){
   let density = 20;
   var space = width/density;
 
-  background(150);
+  background(0);
 
   // for(var x = 0; x < width; x+=space){
   //   for(var y = 0; y < width; y+=space)
@@ -13,18 +13,25 @@ function setup(){
   // }
 }
 function draw(){
-
-  AB()
+  if(mouseIsPressed === true){
+    background(0)
+    AB()
+  }
+  else{
+    AB()
+  }
 }
   var t= 0;
   var t2=0;
-  var x1,y1,x2,y2,x3,y3 = null;
+  var x1,y1,x2,y2,x3,y3,x4,y4 = null;
   x1 = 100;
   y1 = 300;
   x2 = 350;
   y2 = 400;
   x3 = 450;
   y3 = 200;
+  x4 = 550;
+  y4 = 300;
   var length12 = (x2-x1)+(y2-y1);
   var length23 = (x3-x2)+(y3-y2);
 
@@ -58,10 +65,11 @@ function AB(){
 
 
   dot((z1*(1-t2)+(z2*t2)),(q1*(1-t2)+(q2*t2)),"violet")
-  stroke(0, 126, 100, 10)
+
   // r, g, b, [alpha]
   line(z1,q1,z2,q2);
   line(x1,y1,x2,y2);
+  stroke(255, 255,255, 50)
   line(x2,y2,x3,y3);
   move(z1,x2)
 }
@@ -77,6 +85,6 @@ function move(z1,x2){
     t2 = t*1;
     if(z1 > x2){
       t = 0;
-          background(150)
+          background(0)
     }
 }
