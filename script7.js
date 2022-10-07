@@ -2,7 +2,7 @@ var t = 0;
 var t2 = 0;
 var char = "t<-200";
 var char2 = "t2=0"
-var x = 200, y = 500 ; 
+var x = 200, y = 500 ;
 var mycolor = 50;
 
 function setup(){
@@ -11,7 +11,7 @@ function setup(){
 
 function draw(){
   if( mouseIsPressed === true){
-    MakeWave();  
+    MakeWave();
   }
   else{
     background(0,128,255);
@@ -63,14 +63,14 @@ function MakeWave(){
       var calcX1 = (((x*(i-1))*(1-t2))+(x*i*t2));
       var calcY1 = (((y+t)*(1-t2)) + ((y-t)*t2));
       Wavedot(calcX1,calcY1,"yellow");
-      // Wavedot(calcX1/2,calcY1/2,"yellow");  
-  
+      // Wavedot(calcX1/2,calcY1/2,"yellow");
+
     }
     else{
       stroke(0,10,130,50);
-      Wavedot(x*i,y+t,mycolor*i);      
+      Wavedot(x*i,y+t,mycolor*i);
       if(i !==0){
-        line(x*i,y+t,x*(i-1),y-t);  
+        line(x*i,y+t,x*(i-1),y-t);
       }
       var calcX2 = (((x*(i-1))*(1-t2))+(x*i*(t2)));
       var calcY2 = (((y-t)*(1-t2)) + ((y+t)*(t2)));
@@ -78,7 +78,8 @@ function MakeWave(){
       // Wavedot(calcX2/2,calcY2/2,"yellow");
     }
     stroke("white");
-    line(calcX1,calcY1,calcX2,calcY2);
+    // line(calcX1,calcY1,calcX2,calcY2);
+
     // if(i !==0){
     //   Wavedot((calcX1*(t2)+calcX2*(1-t2)),(calcY1*(t2)+calcY2*(1-t2)),"white")
 

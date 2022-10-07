@@ -17,9 +17,9 @@ function draw(){
   translate(width / 2, height/2);
 
   for(var i=0; i< 200; i++){
-    push(); 
+    push();
 
-    rotate(sin(frameCount + i * 2 ) * 50);
+    rotate(sin(frameCount + i * 3 ) * 50);
     // 색 입히는건 카피임.
     var r = map(sin(frameCount), -1, 1, 50, 255);
     var g = map(cos(frameCount /2), -1, 1, 50, 255);
