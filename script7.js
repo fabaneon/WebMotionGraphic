@@ -55,9 +55,10 @@ function MakeWave(){
   console.log(t2);
   for(var i=1; i < 11; i++){
     if(i%2 !== 0){
-      stroke(0,10,130,255);
+      stroke(0,10,130,0);
 
       Wavedot(x*i,y+(-t),mycolor*i);
+
       line(x*(i-1),y+t,x*i,y-t);
       // 홀수 점 계산식
       var calcX1 = (((x*(i-1))*(1-t2))+(x*i*t2));

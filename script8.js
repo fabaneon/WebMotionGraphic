@@ -20,6 +20,7 @@ function draw(){
     push();
 
     rotate(sin(frameCount + i * 3 ) * 50);
+    // line(i, sin(frameCount + i * 3 ) * 50, i,  500)
     // 색 입히는건 카피임.
     var r = map(sin(frameCount), -1, 1, 50, 255);
     var g = map(cos(frameCount /2), -1, 1, 50, 255);
