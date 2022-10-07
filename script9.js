@@ -6,11 +6,12 @@ function setup() {
 function draw(){
   // background(0,125,230)
 
-  background (10,20,30);
+  background (10,20,30,100);
   noFill();
   stroke(0,128,230,50);
   translate(width/2, height/2);
   for(var i=0; i< windowWidth; i++){
+
     stroke(sin(frameCount)*i,cos(frameCount/4)*i,tan(frameCount/2)+i,0+(i*i));
 
     push();
@@ -27,4 +28,6 @@ function draw(){
     }
     pop();
   }
+  line(width/2,500,width/2,-500);
+
   }
