@@ -87,7 +87,7 @@ function animate(){
         // console.log(y)
         
         circleArr[i].update();
-        
+
         // circle.update();
     }
     
