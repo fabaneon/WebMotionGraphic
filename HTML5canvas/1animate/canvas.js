@@ -17,7 +17,7 @@ function Circle(x,y,vx,vy,radius){
         d.beginPath();
         d.arc(this.x,this.y,this.radius,0,Math.PI*2,false);
         // d.arc(x,y,radius,0,Math.PI*2,false);
-        var rgba = "rgba("+255+","+0+","+255+",255)";
+        var rgba = "rgba("+vx+","+y+","+x+",255)";
         d.strokeStyle = rgba;
         d.stroke();
         
@@ -42,13 +42,13 @@ function Circle(x,y,vx,vy,radius){
     }
 }
 var radius = 30;
-var x = Math.random(2,30) * (innerWidth - radius*2);
-var y = Math.random(2,30) * (innerHeight - radius*2);
+var x = Math.random() * (innerWidth - radius*2);
+var y = Math.random() * (innerHeight - radius*2);
 
 // xy좌표
 
-var vx = (Math.random(2,30) - 0.5) * 0.01;
-var vy = (Math.random(2,30) - 0.5) * 0.01;
+var vx = (Math.random() - 0.5) * 0.01;
+var vy = (Math.random() - 0.5) * 0.01;
 
 // Velocity XY
 
