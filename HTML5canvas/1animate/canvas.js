@@ -41,9 +41,11 @@ function Circle(x,y,vx,vy,radius){
         this.draw();
     }
 }
-var radius = 30;
-var x = Math.random() * (innerWidth - radius*2);
-var y = Math.random() * (innerHeight - radius*2);
+
+
+// var radius = 30;
+var x = 50;
+var y = 50;
 
 // xy좌표
 
@@ -55,15 +57,15 @@ var vy = (Math.random() - 0.5) * 0.01;
 var circle = new Circle(x,y,vx,vy,radius);
 
 var circleArr = [];
-for (var i = 0; i < 100; i++){
+for (var i = 0; i < 200; i++){
     var radius = 30;
     var x = Math.random(2,30) * (innerWidth - radius*2);
     var y = Math.random(2,30) * (innerHeight - radius*2);
 
     // xy좌표
 
-    var vx = (Math.random(2,30) - 0.5) * 8;
-    var vy = (Math.random(2,30) - 0.5) * 8;
+    var vx = (Math.random(2,30) - 0.5) * 2;
+    var vy = (Math.random(2,30) - 0.5) * 2;
 
     // Velocity XY
     circleArr.push(new Circle(x,y,vx,vy,radius));
@@ -73,10 +75,19 @@ function animate(){
     requestAnimationFrame(animate);
     // 애니매이션을 위한 프레임카운트를 호출하는 함수.
     // 매개변수에는 해당 함수를 재귀함수형식으로 넣어준다.
-    c.clearRect(0,0,canvas.width,canvas.height);
     // circleArr[1].update();
+    
+    // c.fillStyle = "rgba(255," + 255 + ",255,0)";
+    // c.clearRect(0,0,canvas.width,canvas.height);
+        c.fillStyle = "rgba(0,0,0,200)";
+        c.fillRect(200,200,canvas.width-400,canvas.height-400);      
+
+
     for(var i = 0; i < circleArr.length; i++){
+        // console.log(y)
+        
         circleArr[i].update();
+        
         // circle.update();
     }
     
@@ -114,20 +125,21 @@ function animate(){
     
     // }
 
-    // x += vx;
-    // y += vy;
+    x += vx;
+    y += vy;
 
-    // // console.log("x" + (x));
-    // // console.log("y" + y);
+    // console.log("x" + (x));
+    // console.log("y" + y);
 
-    // // console.log(innerWidth)
-    // if(x + radius> innerWidth || x - radius < 0){
-    //     vx = -vx;
-    // }
-    // if(y + radius> innerHeight || y - radius < 0 ){
-    //     vy = -vy;
-    // }
+    // console.log(innerWidth)
+    if(x + radius> innerWidth || x - radius < 0){
+        vx = -vx;
+    }
+    if(y + radius> innerHeight || y - radius < 0 ){
+        vy = -vy;
+    }
 
+    // 위 주석처리된 반복문과 아래 조건문 함수는 별도의 함수 생성을 하지않고 도형생서을 할때 사용했던 내용이다.
 
 }
 
