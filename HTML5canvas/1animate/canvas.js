@@ -5,47 +5,84 @@ canvas.width = window.innerWidth;
 var c = canvas.getContext("2d"), d = canvas.getContext("2d");
 
 
-var x = 100;
-var y = 100;
 
-// xy좌표
 
-var vx = 10;
-var vy = 10;
+function Circle(x,y,vx,vy,radius){
+    this.x = x;
+    this.y = y;
+    this.vx = vx;
+    this.vy = vy
+    this.radius = radius;
 
-// Velocity XY
+    this.draw = function(){
+        d.beginPath();
+        d.arc(this.x,this.y,this.radius,0,Math.PI*2,false);
+        // d.arc(x,y,radius,0,Math.PI*2,false);
+        var rgba = "rgba("+255+","+0+","+255+",255)";
+        d.strokeStyle = rgba;
+        d.stroke();
+        
+    }
+    this.update = function(){
 
-var radius = 30;
+    
+        // console.log("x" + (x));
+        // console.log("y" + y);
+    
+        // console.log(innerWidth)
+        if(this.x + this.radius> innerWidth || this.x - this.radius < 0){
+            this.vx = -this.vx;
+        }
+        if(this.y + this.radius> innerHeight || this.y - this.radius < 0 ){
+            this.vy = -this.vy;
+        }
+        this.x += this.vx;
+        this.y += this.vy;
+        this.draw();
+    }
+}
+
+var circleArr = [];
+for (var i = 0; i < 10; i++){
+    var x = Math.random() * innerWidth - radius*2;
+    var y = Math.random() * innerHeight - radius*2;
+
+    // xy좌표
+
+    var vx = (Math.random(2,30) - 0.5) * 0.01;
+    var vy = (Math.random(2,30) - 0.5) * 0.01;
+
+    // Velocity XY
+    var radius = 30;
+    circleArr.push(new Circle(x,y,vx,vy,radius));
+}
+
 function animate(){
     requestAnimationFrame(animate);
     // 애니매이션을 위한 프레임카운트를 호출하는 함수.
-    // 매개변수에는 해당 함수를 재귀함수형식으로 넣어준다. 
+    // 매개변수에는 해당 함수를 재귀함수형식으로 넣어준다.
     for(var i=0; i < canvas.width/2; i++){
-        c.clearRect(0,0,canvas.width,canvas.height);  
-        // 사각형 영역만큼 지우기 
+        c.clearRect(0,0,canvas.width,canvas.height);
+        for(var i = 0; i < circleArr.length; i++){
+            circleArr[i];
+        }
+        //9번째 줄의 원을 그리는 함수
+
+        // 사각형 영역만큼 지우기
         // 0,0 은 그냥 해두고 가로 너비 좌표 , 세로너비 좌표
-
-        c.beginPath();
-        c.arc(i/2+vx,Math.sin(x/50*0.3)*canvas.height/4+400,radius,0,Math.PI*2,false);
-        var rgba = "rgba("+(i*x)+","+x+","+Math.random(0,255)+",255)";
-        c.strokeStyle = rgba;
-        c.stroke();  
-
-        c.beginPath();
-        c.arc(i,Math.sin((y/100+10)*0.3)*canvas.height/4+400,radius,0,Math.PI*2,false);
-        var rgba = "rgba("+(i*y)+","+y+","+Math.random(0,255)+",255)";
-        c.strokeStyle = rgba;
-        c.stroke();  
-
-        d.beginPath();
-        d.arc(x,y,radius,0,Math.PI*2,false);
-        d.arc(x,y,radius,0,Math.PI*2,false);
-
-        var rgba = "rgba("+(i*x)+","+x+","+255+",255)";
-
-        d.strokeStyle = rgba;
-        d.stroke();  
-
+        
+        // c.beginPath();
+        // c.arc(i/2+vx,Math.sin(x/50*0.3)*canvas.height/4+400,radius,0,Math.PI*2,false);
+        // var rgba = "rgba("+(i*x)+","+x+","+Math.random(0,255)+",255)";
+        // c.strokeStyle = rgba;
+        // c.stroke();
+        
+        // c.beginPath();
+        // c.arc(i,Math.sin((y/100+10)*0.3)*canvas.height/4+400,radius,0,Math.PI*2,false);
+        // var rgba = "rgba("+(i*y)+","+y+","+Math.random(0,255)+",255)";
+        // c.strokeStyle = rgba;
+        // c.stroke();
+        
         // 위아래로 반복운동하는 원
 
         // c.beginPath();
@@ -57,22 +94,23 @@ function animate(){
 
         // p5js 에서 공부하던 sin 함수를 적용해보았다.
 
+
+    
     }
 
-    // c.clearRect(x,i,canvas.width,canvas.height);  
-    x += vx;
-    y += vy;
+    // x += vx;
+    // y += vy;
 
-    console.log("x" + (x));
-    console.log("y" + y);
+    // // console.log("x" + (x));
+    // // console.log("y" + y);
 
-    // console.log(innerWidth)
-    if(x + radius> innerWidth || x - radius < 0){
-        vx = -vx;
-    }
-    if(y + radius> innerHeight || y - radius < 0 ){
-        vy = -vy;
-    }
+    // // console.log(innerWidth)
+    // if(x + radius> innerWidth || x - radius < 0){
+    //     vx = -vx;
+    // }
+    // if(y + radius> innerHeight || y - radius < 0 ){
+    //     vy = -vy;
+    // }
 
 
 }
