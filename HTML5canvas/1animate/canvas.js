@@ -6,7 +6,6 @@ var c = canvas.getContext("2d"), d = canvas.getContext("2d");
 
 
 
-
 function Circle(x,y,vx,vy,radius){
     this.x = x;
     this.y = y;
@@ -38,22 +37,35 @@ function Circle(x,y,vx,vy,radius){
         }
         this.x += this.vx;
         this.y += this.vy;
+
         this.draw();
     }
 }
+var radius = 30;
+var x = Math.random(2,30) * (innerWidth - radius*2);
+var y = Math.random(2,30) * (innerHeight - radius*2);
+
+// xy좌표
+
+var vx = (Math.random(2,30) - 0.5) * 0.01;
+var vy = (Math.random(2,30) - 0.5) * 0.01;
+
+// Velocity XY
+
+var circle = new Circle(x,y,vx,vy,radius);
 
 var circleArr = [];
-for (var i = 0; i < 10; i++){
-    var x = Math.random() * innerWidth - radius*2;
-    var y = Math.random() * innerHeight - radius*2;
+for (var i = 0; i < 100; i++){
+    var radius = 30;
+    var x = Math.random(2,30) * (innerWidth - radius*2);
+    var y = Math.random(2,30) * (innerHeight - radius*2);
 
     // xy좌표
 
-    var vx = (Math.random(2,30) - 0.5) * 0.01;
-    var vy = (Math.random(2,30) - 0.5) * 0.01;
+    var vx = (Math.random(2,30) - 0.5) * 8;
+    var vy = (Math.random(2,30) - 0.5) * 8;
 
     // Velocity XY
-    var radius = 30;
     circleArr.push(new Circle(x,y,vx,vy,radius));
 }
 
@@ -61,11 +73,15 @@ function animate(){
     requestAnimationFrame(animate);
     // 애니매이션을 위한 프레임카운트를 호출하는 함수.
     // 매개변수에는 해당 함수를 재귀함수형식으로 넣어준다.
-    for(var i=0; i < canvas.width/2; i++){
-        c.clearRect(0,0,canvas.width,canvas.height);
-        for(var i = 0; i < circleArr.length; i++){
-            circleArr[i];
-        }
+    c.clearRect(0,0,canvas.width,canvas.height);
+    // circleArr[1].update();
+    for(var i = 0; i < circleArr.length; i++){
+        circleArr[i].update();
+        // circle.update();
+    }
+    
+    // for(var i=0; i < canvas.width/2; i++){
+    //     c.clearRect(0,0,canvas.width,canvas.height);
         //9번째 줄의 원을 그리는 함수
 
         // 사각형 영역만큼 지우기
@@ -96,7 +112,7 @@ function animate(){
 
 
     
-    }
+    // }
 
     // x += vx;
     // y += vy;
