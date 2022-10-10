@@ -4,7 +4,8 @@ canvas.height = window.innerHeight;
 canvas.width = window.innerWidth -30;
 
 
-var c = canvas.getContext("2d"), d = canvas.getContext("2d");
+const c = canvas.getContext("2d"), d = canvas.getContext("2d");
+const ctx = canvas.getContext("2d");
 
 var maxRadius = 50;
 var minRadius = 5;
@@ -147,6 +148,17 @@ function animate(){
     for(var i=0; i < circleArr.length;  i++){
         circleArr[i].update();
     }
+
+    ctx.fillStyle = "white";
+    ctx.font = "italic bold 48px Arial"; //Arial 적용
+    ctx.fillText("원자의 세계", 100, 60);
+    
+    ctx.font = "italic bold 18px Arial"; //Arial 적용
+    
+    ctx.fillText("상호작용에 대해 공부해보았다.", 100, 120);
+    ctx.fillText("마우스 커서가 원자 근처로 가면 원자가 부풀어 오른다.", 100, 150);
+
+    ctx.fillText("자세한것은 F12 -> Source에서 소스파일 주석참고",100, 180);
 
 }
 

@@ -5,6 +5,11 @@ canvas.height = window.innerHeight;
 
 var c = canvas.getContext("2d");
 
+const ctx = canvas.getContext("2d");
+
+// 3-1. 텍스트 그리기(기본)
+
+출처: https://curryyou.tistory.com/331 [카레유:티스토리]
 // window.addEventListener("resize",
 //     function(){
 //         canvas.width = window.innerWidth;
@@ -78,7 +83,7 @@ function wavesetup(){
 wavesetup();
 
 function init(){
-    pointArr = [[],[],[]],[];    
+    pointArr = [[],[],[],[]];    
     circleArr = [[],[],[],[]];
     wavesetup();
 }
@@ -89,14 +94,14 @@ function createwave(wavenum,r,g,b,alpha){
     c.lineTo(canvas.width,canvas.height);
     c.lineTo(0,canvas.height);
     c.lineTo(0,canvas.height/2);
+
+
+
     for(var i=0; i < pointArr[wavenum].length; i++){
         pointArr[wavenum][i].y;
         var x = pointArr[wavenum][i].x;
         var y = pointArr[wavenum][i].y;
         
-        var vx = pointArr[wavenum][i].vx;
-        var vy = pointArr[wavenum][i].vy;
-        var radius = pointArr[wavenum][i].radius;
         if(i > 0){
             var cpx = (pointArr[wavenum][i-1].x+(x - pointArr[wavenum][i-1].x)/2);
             var cpy = (pointArr[wavenum][i-1].y+(y - pointArr[wavenum][i-1].y)/2);
@@ -108,6 +113,7 @@ function createwave(wavenum,r,g,b,alpha){
             (cpy+Math.sin(cpy)*0.6*canvas.height/10),
             x,
             y+Math.sin(y)*0.6*canvas.height/10);
+
         }
         
         // pointArr[wavenum][i].x += pointArr[wavenum][i].vx;
@@ -167,6 +173,30 @@ function animate(){
     // c.strokeStyle = "red";
     // c.stroke();
 // 그냥 화면 중앙을 표시하는 빨간줄.
-    
+
+
+// 3-2. 텍스트 그리기(최대 너비 지정)
+// ctx.fillText("2. 캔버스에 텍스트를 씁니다.", 100, 30, 50);
+
+// 3-3. 텍스트 폰트 설정
+ctx.fillStyle = "black";
+ctx.font = "italic bold 48px Arial"; //Arial서체 없을 경우, sans-serif 적용
+ctx.fillText("Wave 만들기 완결", 100, 60);
+ctx.font = "italic bold 18px Arial"; //Arial서체 없을 경우, sans-serif 적용
+
+ctx.fillText("기본 구성은 wave1 과 동일하다", 100, 90);
+ctx.fillText("곡선(point)의 생성은 점들의 이전값, 현재값을 따로 저장하고",
+                 100, 150);
+ctx.fillText("그 중간값을 구해서 quadraticCurveTo 함수에 대입한다.", 100, 180);
+ctx.fillText("비슷한 방식으로 각 중간점(circle)들도 생성해주면 wave 하나가 완성되는데", 100, 210);
+ctx.fillText("비슷한 방식으로 각 중간점(circle)들도 생성해주면 wave 하나가 완성되는데", 100, 210);
+ctx.fillText("이러한 wave를 다수 생성하는 방법은 각각 pointArr,circleArr 에 2차원 배열로", 100, 240);
+ctx.fillText("저장하고 이를 loop문을 통해 x,y,vx .. 등의 값과 wave 생성을 순차적으로 진행해주면 된다.", 100, 270);
+
+ctx.fillText("그이외 vy값은 무한히 y에 더해지므로 wave가 점점 아래로가거나 위로 가는데", 100, 330);
+ctx.fillText("이때문에 vy값을 반전시켜주는 구문을 추가해서 중간에 뚝 끊기며", 100, 360);
+ctx.fillText("잠시동안 wave가 왜곡되는 단점이 있다", 100, 390);
+
+
 }
 animate();

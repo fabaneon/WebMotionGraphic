@@ -3,7 +3,9 @@ const canvas = document.querySelector("#canvas");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-var c = canvas.getContext("2d");
+const c = canvas.getContext("2d");
+const ctx = canvas.getContext("2d");
+
 
 // window.addEventListener("resize",
 //     function(){
@@ -102,6 +104,19 @@ function animate(){
     circleArr[9].y = 400;
     circleArr[9].update();
     c.stroke();
+
+    ctx.fillStyle = "white";
+    ctx.font = "italic bold 48px Arial"; //Arial 적용
+    ctx.fillText("Wave 만들기 심화", 100, 60);
+    
+    ctx.font = "italic bold 18px Arial"; //Arial 적용
+    
+    ctx.fillText("우선은 점들을 for문을 이용해서 각기 다른 vy값으로 움직이게끔 만들었다.", 100, 90);
+    ctx.fillText("이제 해당 점들의 이전값, 현재값을 따로 저장하고 그 중간값을 구해서",
+                     100, 150);
+    ctx.fillText(" curve 함수에 대입해 진짜 파형을 만들어봐야겠다.", 100, 180);
+    ctx.fillText("자세한것은 F12 -> Source에서 소스파일 주석참고", 100, 210);
+
 
 }
 animate();
