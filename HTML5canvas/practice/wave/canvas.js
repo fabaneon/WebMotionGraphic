@@ -29,22 +29,16 @@ function circle(x,y,vx,vy,radius){
     this.vy = vy;
     this.radius = radius;
 
-
     this.draw = function(){
         // c.beginPath();
-        c.lineTo(this.x,this.y+Math.sin(this.y)*0.5*canvas.height/8);
-        // c.stroke();
-        // c.beginPath();
-        c.arc(this.x,this.y+Math.sin(this.y)*0.5*canvas.height/8,this.radius,0,Math.PI * 2,false);
-        c.lineTo(this.x,this.y+Math.sin(this.y)*0.5*canvas.height/8);
+        c.arc(this.x,this.y+Math.sin(this.y)*0.6*canvas.height/5,this.radius,0,Math.PI * 2,false);
 
         c.strokeStyle = "white"
-        c.stroke();
+        // c.stroke();
     }
     this.update = function(){
-        this.x += this.vx;
+        // this.x += this.vx;
         this.y += this.vy;
-        console.log(Math.sin(900))
 
         this.draw();
     }
@@ -55,8 +49,8 @@ function circle(x,y,vx,vy,radius){
 var circleArr = [];
 
 function wave(){
-    for(var i=0; i < canvas.width/100; i++){
-        var radius = 30; 
+    for(var i=0; i < 10; i++){
+        var radius = 20; 
         
         var x = 100;
         var y = 300;
@@ -81,9 +75,33 @@ function animate(){
     c.fill();
     c.fillRect(0,0,canvas.width,canvas.height);
     c.beginPath();
-    c.moveTo(0,300);
-    for(var i=0; i < circleArr.length; i++){
+    circleArr[0].x = 100;
+    circleArr[0].y = 400;
+    circleArr[0].update();
+
+    for(var i=2; i < circleArr.length-1; i++){
+
         circleArr[i].update();
+        // if(i > 1){
+            // var beforeX = circleArr[i-1].x;
+            // var beforeY = circleArr[i-1].y;
+
+            // var nowX = circleArr[i].x;
+            // var nowY = circleArr[i].y;
+            // var cpX = nowX - beforeX;
+            // var cpY = nowY - beforeY;
+            // // c.quadraticCurveTo(beforeX,beforeY,cpX,cpY);
+            
+            // c.quadraticCurveTo(cpX,cpY,nowX,nowY);
+
+        // }
+
     }
+    // console.log(circleArr[1]);
+    circleArr[9].x = 900;
+    circleArr[9].y = 400;
+    circleArr[9].update();
+    c.stroke();
+
 }
 animate();
