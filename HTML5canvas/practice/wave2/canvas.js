@@ -180,9 +180,10 @@ function animate(){
 
 // 3-3. 텍스트 폰트 설정
 ctx.fillStyle = "black";
-ctx.font = "italic bold 48px Arial"; //Arial서체 없을 경우, sans-serif 적용
+ctx.font = "italic bold 48px Arial"; //Arial 적용
 ctx.fillText("Wave 만들기 완결", 100, 60);
-ctx.font = "italic bold 18px Arial"; //Arial서체 없을 경우, sans-serif 적용
+
+ctx.font = "italic bold 18px Arial"; //Arial 적용
 
 ctx.fillText("기본 구성은 wave1 과 동일하다", 100, 90);
 ctx.fillText("곡선(point)의 생성은 점들의 이전값, 현재값을 따로 저장하고",
