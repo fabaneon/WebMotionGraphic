@@ -28,9 +28,16 @@ var mouse = {
 window.addEventListener("mousemove", 
     function(event){
 
-        mouse.x = event.x;
-        mouse.y = event.y;
-        console.log(mouse);
+        // mouse.x = event.x;
+        // mouse.y = event.y;
+
+        mouse.x = event.clientX - canvas.offsetLeft + window.scrollX,
+        mouse.y = event.clientY - canvas.offsetTop + window.scrollY
+
+        console.log(event.clientY - canvas.offsetLeft);
+
+        // 중력 대포에서 배운 내용.
+        // 이제 인터렉션 배율을 조절해서 스크롤을 해도 마우스 좌표값이 이상해지지않는다.
         
     }
 )
