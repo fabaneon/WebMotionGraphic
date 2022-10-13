@@ -266,8 +266,8 @@ canvas.addEventListener("mousemove", event => {
     console.log(event.clientX - canvas.clientLeft);
 
 
-    // mouse.x = event.clientX - canvas.offsetLeft,
-    // mouse.y = event.clientY - canvas.offsetTop
+    // mouse.x = event.clientX - canvas.offsetLeft + window.scrollX,
+    // mouse.y = event.clientY - canvas.offsetTop + window.scrollY
 
     // console.log(event.clientY - canvas.offsetLeft);
     // 위 내용을 상호작용 예제에 적용시켜보다 발견한 정답이다.
