@@ -74,8 +74,10 @@ function wavesetup(){
             var vx = (0.1) * 0.5; 
             var vy = (0.1) * 0.5; 
             
+            var random = Math.floor(Math.random()* 10);
+
             pointArr[a].push({x: x*i, y: y+i+a, vx: vx, vy: vy, radius: radius});
-            circleArr[a].push(new circle(x*i,y+i+a,vx,vy,radius))
+            circleArr[a].push(new circle(x*i,y+i+a,vx,vy,radius));
         }
     }
 
