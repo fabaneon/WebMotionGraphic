@@ -126,6 +126,8 @@ canvas.addEventListener("click", function(){
 
         ballcreate =false;
         console.log("ball created & turn false!");
+    	console.log("okay checked");
+			
         
 
         setTimeout(()=>{
