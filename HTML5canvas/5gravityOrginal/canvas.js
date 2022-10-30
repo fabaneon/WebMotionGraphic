@@ -48,6 +48,7 @@ function Circle(x,y,vx,vy,radius,r,g,b){
     this.gravity = 0.05;
     this.elasticity = 0.78 - this.mass/100;
     this.friction = 0.008;
+	
     this.draw = function(){
         
         c.beginPath();
