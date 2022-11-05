@@ -18,7 +18,6 @@ const ctx = canvas.getContext("2d");
 
 window.addEventListener("resize",
     function(){
-
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         init();
@@ -64,12 +63,14 @@ function dotcreate(x,y,vx,vy,t,radius,height){
 	this.t = t;
 	this.height = height;
 
-
 	this.radius = radius;
 
 	this.draw = function(){
+		
 		ctx.beginPath();
-		ctx.arc(this.x,this.y+Math.sin(this.y)*this.height*canvas.height/10,this.radius,0,Math.PI*2,false);
+		ctx.arc(this.x,
+				this.y+Math.sin(this.t)*this.height*canvas.height/10,
+				this.radius,0,Math.PI*2,false);
 		ctx.fillStyle = "pink";
 		ctx.fill();	
 		ctx.strokeStyle = "black";
@@ -78,19 +79,21 @@ function dotcreate(x,y,vx,vy,t,radius,height){
 	}
 	this.update = function(){
 		this.x += 10*this.vx;
-		this.y += this.vy;
-		if(this.x < 0 || this.x > x * 10){
+		this.t += this.vy;
+		
+		
+		
+		if(this.x < 0 || this.x > canvas.width){
 			this.vx = this.vx * (-1);
 		}
-		if(this.x > x * 10){
-			this.x = x * 10;
+		if(this.x > canvas.width){
+			this.x = canvas.width;
 			console.log("over");
 		}
 		else if(this.x < 0){
 			this.x = 0;
 			console.log("down");
 		}
-		// console.log(Math.floor(this.y));
 		this.draw();
 	}
 	
@@ -104,6 +107,7 @@ var dotArr = [];
 
 
 function wavesetup(){
+	
     for(var a=0; a < waveArr.length; a++){
 		
 		var density = 30;
@@ -123,6 +127,8 @@ function wavesetup(){
         var vx = (0.1) * 0.5; 
         var vy = (0.1) * 0.5; 
 
+		dotArr.push(new dotcreate(x,y,vx,vy,radius));
+		
 		for(var i=0; x < canvas.width; i++, x+= space){
 			
 			waveArr[a].push({x: x, y: y, vx: vx, vy: vy,t:y+i,ct:y+i, radius: radius, height: waveHeight});
@@ -131,7 +137,7 @@ function wavesetup(){
 
 		}
 		circleArr[a].pop();				
-		dotArr.push(new dotcreate(x,y,vx,vy,radius));
+		
     }
 		console.log("wave number : ");
 		console.log(waveArr);
@@ -229,44 +235,40 @@ function animate(){
     ctx.fillRect(0,0,canvas.width,canvas.height);
     for(var i=0; i < waveArr.length; i++){
         createwave(i,  r*i+30,  g-i+30, b/i+30,0.4);
-    }
+    }	// createwave(몇번째 wave인지,     r,  g,   b,   0.5);
+
 	
-	for(var i=1; i < dotArr.length; i++){
-    	dotArr[i].update();
-		// console.log(dotArr[0]);
-    }
-	dotArr[0].update();
-	// ctx.beginPath();
-	// ctx.arc(waveArr[1][0].x,waveArr[1][0].y,6,0,Math.PI*2,false);
-	// ctx.arc(waveArr[1][1].x,waveArr[1][1].y,6,0,Math.PI*2,false);
+	// for(var i=1; i < dotArr.length; i++){
+	// dotArr[1].update();
+	// 	console.log(dotArr[1]);
+	// }
+	
+    dotArr[1].update();
 
+	ctx.beginPath();
+	ctx.moveTo(0,canvas.height/2);
+	ctx.lineTo(canvas.width,canvas.height/2);
+	ctx.strokeStyle = "red";
+	ctx.stroke();
 
-	// ctx.stroke();
-    // createwave(몇번째 wave인지,     r,  g,   b,   0.5);
-ctx.beginPath();
-ctx.moveTo(0,canvas.height/2);
-ctx.lineTo(canvas.width,canvas.height/2);
-ctx.strokeStyle = "red";
-ctx.stroke();
+	ctx.fillStyle = "black";
+	ctx.font = "italic bold 48px Arial"; //Arial 적용
+	ctx.fillText("Wave 활용", 100, 60);
 
-ctx.fillStyle = "black";
-ctx.font = "italic bold 48px Arial"; //Arial 적용
-ctx.fillText("Wave 활용", 100, 60);
+	ctx.font = "italic bold 18px Arial"; //Arial 적용
 
-ctx.font = "italic bold 18px Arial"; //Arial 적용
+	ctx.fillText("wave 생성 로직을 살짝 바꿨다", 100, 90);
+	ctx.fillText("아무튼 이번 예제의 목적은 기존 wave 생성 로직에서 필요값들을 추출해",
+					 100, 150);
+	ctx.fillText("그 wave 위에서 움직이는 점을 만드는것이다.", 100, 180);
+	//ctx.fillText("비슷한 방식으로 각 중간점(circle)들도 생성해주면 wave 하나가 완성되는데", 100, 210);
+	//ctx.fillText("비슷한 방식으로 각 중간점(circle)들도 생성해주면 wave 하나가 완성되는데", 100, 210);
+	//ctx.fillText("이러한 wave를 다수 생성하는 방법은 각각 pointArr,circleArr 에 2차원 배열로", 100, 240);
+	//ctx.fillText("저장하고 이를 loop문을 통해 x,y,vx .. 등의 값과 wave 생성을 순차적으로 진행해주면 된다.", 100, 270);
 
-ctx.fillText("wave 생성 로직을 살짝 바꿨다", 100, 90);
-ctx.fillText("아무튼 이번 예제의 목적은 기존 wave 생성 로직에서 필요값들을 추출해",
-                 100, 150);
-ctx.fillText("그 wave 위에서 움직이는 점을 만드는것이다.", 100, 180);
-//ctx.fillText("비슷한 방식으로 각 중간점(circle)들도 생성해주면 wave 하나가 완성되는데", 100, 210);
-//ctx.fillText("비슷한 방식으로 각 중간점(circle)들도 생성해주면 wave 하나가 완성되는데", 100, 210);
-//ctx.fillText("이러한 wave를 다수 생성하는 방법은 각각 pointArr,circleArr 에 2차원 배열로", 100, 240);
-//ctx.fillText("저장하고 이를 loop문을 통해 x,y,vx .. 등의 값과 wave 생성을 순차적으로 진행해주면 된다.", 100, 270);
-
-//ctx.fillText("그이외 vy값은 무한히 y에 더해지므로 wave가 점점 아래로가거나 위로 가는데", 100, 330);
-//ctx.fillText("이때문에 vy값을 반전시켜주는 구문을 추가해서 중간에 뚝 끊기며", 100, 360);
-//ctx.fillText("잠시동안 wave가 왜곡되는 단점이 있다", 100, 390);
+	//ctx.fillText("그이외 vy값은 무한히 y에 더해지므로 wave가 점점 아래로가거나 위로 가는데", 100, 330);
+	//ctx.fillText("이때문에 vy값을 반전시켜주는 구문을 추가해서 중간에 뚝 끊기며", 100, 360);
+	//ctx.fillText("잠시동안 wave가 왜곡되는 단점이 있다", 100, 390);
 
 
 }

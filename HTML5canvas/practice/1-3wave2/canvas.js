@@ -18,7 +18,7 @@ window.addEventListener("resize",
     }
 )
 
-function circle(x,y,vx,vy,t,radius,r,g,b,alpha){
+function circle(x,y,vx,vy,t,radius,height,r,g,b,alpha){
     this.x = x;
     this.y = y;
     this.vx = vx;
@@ -26,10 +26,11 @@ function circle(x,y,vx,vy,t,radius,r,g,b,alpha){
     this.t = t;
 	
 	this.radius = radius;
+	this.height = height;
 
     this.draw = function(){
         c.beginPath();
-        c.arc(this.x,this.y+Math.sin(this.t)*0.6*canvas.height/10,this.radius,0,Math.PI * 2,false);
+        c.arc(this.x,this.y+Math.sin(this.t)*this.height*canvas.height/10,this.radius,0,Math.PI * 2,false);
         c.fillStyle = "rgba("+r+","+g+","+b+","+alpha+")"
         c.fill();
         c.strokeStyle = "red"
@@ -55,17 +56,22 @@ function wavesetup(){
         for(var i=0; i < 10; i++){
             var radius = 6; 
             
+			var waveHeight = 0.6;
+			
             var x = canvas.width/9;
             var y = canvas.height/2 ;
 
             var vx = (0.1) * 0.5; 
             var vy = (0.1) * 0.5; 
             
+			
+			
             waveArr[a].push({x: x*i, y: y, vx: vx, vy: vy,
-							 t: y+i+a,ct: y+i+a, radius: radius});
+							 t: y+i+a,ct: y+i+a, radius: radius,
+							height: waveHeight});
         	if(i !== 9){
 				circleArr[a].push(new circle(x*i,y,vx,vy,
-											 y+i+a,radius));				
+											 y+i+a,radius, waveHeight));				
 			}
         }
     }
@@ -85,9 +91,7 @@ function createwave(wavenum,r,g,b,alpha){
     let wave = waveArr[wavenum];
     let curve = wave[0];
     let prev = curve;
-	const startx = curve.x;
-	const starty = curve.y;
-	ctx.moveTo(startx, starty);
+	ctx.moveTo(0, canvas.height/2);
 	let prevcpx = curve.x;
 	let prevcpy = curve.y;
 	
@@ -102,15 +106,15 @@ function createwave(wavenum,r,g,b,alpha){
 		// y좌표값에 직접 vy를 계속 더하면 포인트의 절대좌표가 움직여버린다.
 		if(curve === wave[wave.length-1]){
         	ctx.quadraticCurveTo(cx,
-			cy+Math.sin(ct)*0.6*canvas.height/10,
+			cy+Math.sin(ct)*curve.height*canvas.height/10,
             canvas.width,
             canvas.height/2);			
 		}
 		else{
 		ctx.quadraticCurveTo(cx,
-        	(cy+Math.sin(ct)*0.6*canvas.height/10),
+        	(cy+Math.sin(ct)*curve.height*canvas.height/10),
             curve.x,
-            curve.y+Math.sin(curve.t)*0.6*canvas.height/10);		
+            curve.y+Math.sin(curve.t)*curve.height*canvas.height/10);		
 		}		
 		
         curve.t += curve.vy;
