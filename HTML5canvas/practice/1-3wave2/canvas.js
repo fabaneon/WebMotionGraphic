@@ -18,16 +18,18 @@ window.addEventListener("resize",
     }
 )
 
-function circle(x,y,vx,vy,radius,r,g,b,alpha){
+function circle(x,y,vx,vy,t,radius,r,g,b,alpha){
     this.x = x;
     this.y = y;
     this.vx = vx;
     this.vy = vy;
-    this.radius = radius;
+    this.t = t;
+	
+	this.radius = radius;
 
     this.draw = function(){
         c.beginPath();
-        c.arc(this.x,this.y+Math.sin(this.y)*0.6*canvas.height/10,this.radius,0,Math.PI * 2,false);
+        c.arc(this.x,this.y+Math.sin(this.t)*0.6*canvas.height/10,this.radius,0,Math.PI * 2,false);
         c.fillStyle = "rgba("+r+","+g+","+b+","+alpha+")"
         c.fill();
         c.strokeStyle = "red"
@@ -35,14 +37,8 @@ function circle(x,y,vx,vy,radius,r,g,b,alpha){
     }
     this.update = function(){
         // this.x += this.vx;
-		
-        this.y += this.vy;
+        this.t += this.vy;
 
-        if(this.y > canvas.height/2 + 30 || this.y < canvas.height/2 -30){
-            this.vy = -this.vy;
-        }
-        // vy를 계속 더하다보니 wave가 자꾸 아래로 간다.
-        // 그래서 넣어준 구문.
         this.draw();
     }
 
@@ -65,9 +61,11 @@ function wavesetup(){
             var vx = (0.1) * 0.5; 
             var vy = (0.1) * 0.5; 
             
-            waveArr[a].push({x: x*i, y: y+i+a, vx: vx, vy: vy, radius: radius});
+            waveArr[a].push({x: x*i, y: y+i+a, vx: vx, vy: vy,
+							 t: y+i+a,ct: y+i+a, radius: radius});
         	if(i !== 9){
-				circleArr[a].push(new circle(x*i,y+i+a,vx,vy,radius));				
+				circleArr[a].push(new circle(x*i,y+i+a,vx,vy,
+											 y+i+a,radius));				
 			}
         }
     }
@@ -82,67 +80,54 @@ function init(){
 }
 
 function createwave(wavenum,r,g,b,alpha){
-    c.beginPath();
-  let wave = waveArr[wavenum];
+     ctx.beginPath();
+
+    let wave = waveArr[wavenum];
     let curve = wave[0];
     let prev = curve;
-	
-	ctx.moveTo(curve.x, curve.y);
-
+	const startx = curve.x;
+	const starty = curve.y;
+	ctx.moveTo(startx, starty);
 	let prevcpx = curve.x;
 	let prevcpy = curve.y;
+	
+	
+
     for(var i=1; i < wave.length; i++){
 		curve = wave[i];
-		
         const cx = (prev.x + curve.x) / 2;
         const cy = (prev.y + curve.y) / 2;
-		
+		const ct = (prev.t + curve.t) / 2;
+		// 위의 t값은 계속해서 vy값을 더해줄 움직임 변수.
+		// y좌표값에 직접 vy를 계속 더하면 포인트의 절대좌표가 움직여버린다.
 		if(curve === wave[wave.length-1]){
         	ctx.quadraticCurveTo(cx,
-			cy+Math.sin(cy)*0.6*canvas.height/10,
+			cy+Math.sin(ct)*0.6*canvas.height/10,
             canvas.width,
             canvas.height/2);			
 		}
 		else{
 		ctx.quadraticCurveTo(cx,
-        	(cy+Math.sin(cy)*0.6*canvas.height/10),
+        	(cy+Math.sin(ct)*0.6*canvas.height/10),
             curve.x,
-            curve.y+Math.sin(curve.y)*0.6*canvas.height/10);		
+            curve.y+Math.sin(curve.t)*0.6*canvas.height/10);		
 		}		
-            // ctx.lineTo(wave[i-1].x, 
-            //     wave[i-1].y+Math.sin(wave[i-1].y)*0.6*canvas.height/10,
-            //     x,
-            //     y);
-        // wave[i].x += wave[i].vx;
-        wave[i].y += wave[i].vy;
+		
+        curve.t += curve.vy;
 		if(i === 1){
-		prev.y += wave[i].vy;
+			wave[0].t += curve.vy;
 		}
-		// cpy의 값은 시점과 종점에 영향을 받는다.
-		// 따라서 그 움직임 속도 역시 둘의 영향을 받는다.
-		// 마지막 포인트는 canvas의 우측끝부분과 연결되는 점이 curve가 아님으로 상관없지만
-		// 첫 cpy는 curveTo로 시작하여 중간점이 있는데 여기에다
-		//인덱스값이 0 인  최초 포인트가 고정되어있으므로 사실상 다른 포인트에 비해 cpy가 1/2 속도인 셈이였다.
-		// 따라서 vy값을 한번 더 더해준다.
-		 
-        if(Math.round(wave[i].y) > canvas.height/2 + 30 || wave[i].y < canvas.height/2 -30){
-            wave[i].vy = -wave[i].vy;
-			console.log("relocating");
+        if(curve.y > canvas.height/2 + 30 || curve.y < canvas.height/2 -30){
+            curve.vy = -curve.vy;
         }
 		prev = curve;
 		prevcpx = cx;
 		prevcpy = cy;
-                // vy를 계속 더하다보니 wave가 자꾸 아래로 간다.
-        // 그래서 넣어준 구문.
-   
-        // (x1+(x2-x1)/2)+(100);
-        // quadraticCurveTo 공부 단원에서 알아낸 수식.
     }
 
-	ctx.lineTo(canvas.width,canvas.height/2);
+
 	ctx.lineTo(canvas.width,canvas.height);
 	ctx.lineTo(0,canvas.height);
-	ctx.lineTo(wave[0].x,wave[0].y);
     ctx.fillStyle = "rgba("+r+","+g+","+b+","+alpha+")"
     ctx.fill();
 
@@ -152,7 +137,7 @@ function createwave(wavenum,r,g,b,alpha){
 
     
     for(var i=1; i < circleArr[wavenum].length; i++){
-		circleArr[wavenum][i].update();		
+    circleArr[wavenum][i].update();
     }
 
 	// 점을 없애보고 싶다면 위 loop를 주석처리하자.
@@ -206,9 +191,9 @@ ctx.fillText("비슷한 방식으로 각 중간점(circle)들도 생성해주면
 ctx.fillText("이러한 wave를 다수 생성하는 방법은 각각 pointArr,circleArr 에 2차원 배열로", 100, 240);
 ctx.fillText("저장하고 이를 loop문을 통해 x,y,vx .. 등의 값과 wave 생성을 순차적으로 진행해주면 된다.", 100, 270);
 
-ctx.fillText("그이외 vy값은 무한히 y에 더해지므로 wave가 점점 아래로가거나 위로 가는데", 100, 330);
-ctx.fillText("이때문에 vy값을 반전시켜주는 구문을 추가해서 중간에 뚝 끊기며", 100, 360);
-ctx.fillText("잠시동안 wave가 왜곡되는 단점이 있다", 100, 390);
+ctx.fillText("기존엔 vy값은 무한히 y에 더해지므로 wave가 점점 아래로가거나 위로 가는 단점이 있었는데", 100, 330);
+ctx.fillText("이 문제를 매개변수 t로 대체하여 y좌표는 immutable해졌다.", 100, 360);
+ctx.fillText("더이상 wave의 좌표가 변경되거나 왜곡되는 현상은 발생하지 않는다.", 100, 390);
 
 
 }
