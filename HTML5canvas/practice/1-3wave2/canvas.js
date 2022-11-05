@@ -61,10 +61,10 @@ function wavesetup(){
             var vx = (0.1) * 0.5; 
             var vy = (0.1) * 0.5; 
             
-            waveArr[a].push({x: x*i, y: y+i+a, vx: vx, vy: vy,
+            waveArr[a].push({x: x*i, y: y, vx: vx, vy: vy,
 							 t: y+i+a,ct: y+i+a, radius: radius});
         	if(i !== 9){
-				circleArr[a].push(new circle(x*i,y+i+a,vx,vy,
+				circleArr[a].push(new circle(x*i,y,vx,vy,
 											 y+i+a,radius));				
 			}
         }

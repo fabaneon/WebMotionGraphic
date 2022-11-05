@@ -125,8 +125,8 @@ function wavesetup(){
 
 		for(var i=0; x < canvas.width; i++, x+= space){
 			
-			waveArr[a].push({x: x, y: y+i, vx: vx, vy: vy,t:y+i,ct:y+i, radius: radius, height: waveHeight});
-			circleArr[a].push(new circle(x,y+i,vx,vy,y+i,radius, waveHeight));				
+			waveArr[a].push({x: x, y: y, vx: vx, vy: vy,t:y+i,ct:y+i, radius: radius, height: waveHeight});
+			circleArr[a].push(new circle(x,y,vx,vy,y+i,radius, waveHeight));				
 			console.log(Math.round(x));
 
 		}
@@ -154,9 +154,7 @@ function createwave(wavenum,r,g,b,alpha){
     let wave = waveArr[wavenum];
     let curve = wave[0];
     let prev = curve;
-	const startx = curve.x;
-	const starty = curve.y;
-	ctx.moveTo(startx, starty);
+	ctx.moveTo(0, canvas.height/2);
 	let prevcpx = curve.x;
 	let prevcpy = curve.y;
 	
@@ -245,6 +243,11 @@ function animate(){
 
 	// ctx.stroke();
     // createwave(몇번째 wave인지,     r,  g,   b,   0.5);
+ctx.beginPath();
+ctx.moveTo(0,canvas.height/2);
+ctx.lineTo(canvas.width,canvas.height/2);
+ctx.strokeStyle = "red";
+ctx.stroke();
 
 ctx.fillStyle = "black";
 ctx.font = "italic bold 48px Arial"; //Arial 적용
