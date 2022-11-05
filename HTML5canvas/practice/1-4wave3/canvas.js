@@ -25,16 +25,19 @@ window.addEventListener("resize",
     }
 )
 
-function circle(x,y,vx,vy,radius,r,g,b,alpha){
+function circle(x,y,vx,vy,t,radius,height,r,g,b,alpha){
     this.x = x;
     this.y = y;
     this.vx = vx;
     this.vy = vy;
-    this.radius = radius;
+	this.t = t;
+	this.height = height;
+	
+	this.radius = radius;
 
     this.draw = function(){
         ctx.beginPath();
-        ctx.arc(this.x,this.y+Math.sin(this.y)*0.6*canvas.height/10,this.radius,0,Math.PI * 2,false);
+        ctx.arc(this.x,this.y+Math.sin(this.t)*this.height*canvas.height/10,this.radius,0,Math.PI * 2,false);
         ctx.fillStyle = "rgba("+r+","+g+","+b+","+alpha+")"
         ctx.fill();
         ctx.strokeStyle = "red"
@@ -42,30 +45,31 @@ function circle(x,y,vx,vy,radius,r,g,b,alpha){
     }
     this.update = function(){
         // this.x += this.vx;
-        this.y += this.vy;
-
-        if(this.y > canvas.height/2 + 30 || this.y < canvas.height/2 -30){
-            this.vy = -this.vy;
-        }
-        // vy를 계속 더하다보니 wave가 자꾸 아래로 간다.
-        // 그래서 넣어준 구문.
-
+        this.t += this.vy;
+		// this.height += this.vx;
+		// if (this.height > 1 || this.height < 0.1){
+		// 	this.vx = -this.vx;			
+		// }
         this.draw();
     }
 
 
 }
 
-function dotcreate(x,y,vx,vy,radius){
+function dotcreate(x,y,vx,vy,t,radius,height){
 	this.x = x;
 	this.y = y;
 	this.vx = vx;
 	this.vy = vy;
+	this.t = t;
+	this.height = height;
+
+
 	this.radius = radius;
 
 	this.draw = function(){
 		ctx.beginPath();
-		ctx.arc(this.x,this.y+Math.sin(this.y)*0.6*canvas.height/10,this.radius,0,Math.PI*2,false);
+		ctx.arc(this.x,this.y+Math.sin(this.y)*this.height*canvas.height/10,this.radius,0,Math.PI*2,false);
 		ctx.fillStyle = "pink";
 		ctx.fill();	
 		ctx.strokeStyle = "black";
@@ -101,88 +105,101 @@ var dotArr = [];
 
 function wavesetup(){
     for(var a=0; a < waveArr.length; a++){
-        for(var i=0; i < 12; i++){
-            var radius = 6; 
-            
-            var x = canvas.width/11;
-            var y = canvas.height/2 ;
+		
+		var density = 30;
+		var space = canvas.width / density;
 
-            var vx = (0.1) * 0.5; 
-            var vy = (0.1) * 0.5; 
-            
-            waveArr[a].push({x: x*i, y: y+i+a, vx: vx, vy: vy, radius: radius});
-            circleArr[a].push(new circle(x*i,y+i+a,vx,vy,radius));
-        }
+		var waveHeight = 0.6;
+		// 파형의 높이 조절
+		var pointnum = space;
+
+		console.log("density : " + density);
+        
+		var radius = 6; 
+
+		var x = 0;	
+        var y = canvas.height/2 ;
+
+        var vx = (0.1) * 0.5; 
+        var vy = (0.1) * 0.5; 
+
+		for(var i=0; x < canvas.width; i++, x+= space){
+			
+			waveArr[a].push({x: x, y: y+i, vx: vx, vy: vy,t:y+i,ct:y+i, radius: radius, height: waveHeight});
+			circleArr[a].push(new circle(x,y+i,vx,vy,y+i,radius, waveHeight));				
+			console.log(Math.round(x));
+
+		}
+		circleArr[a].pop();				
 		dotArr.push(new dotcreate(x,y,vx,vy,radius));
     }
+		console.log("wave number : ");
+		console.log(waveArr);
 
+		console.log("circleNumber : ");
+		console.log(circleArr);
 }
 wavesetup();
 
 function init(){
-    waveArr = [[]];    
-    circleArr = [[]];
+    waveArr = [[],[]];    
+    circleArr = [[],[]];
 	dotArr = [];
     wavesetup();
 }
 
 function createwave(wavenum,r,g,b,alpha){
     ctx.beginPath();
-    // ctx.moveTo(canvas.width,canvas.height/2);
-    // ctx.lineTo(canvas.width,canvas.height);
-    // ctx.lineTo(0,canvas.height);
-    // ctx.lineTo(0,canvas.height/2);
 
     let wave = waveArr[wavenum];
     let curve = wave[0];
     let prev = curve;
-	
-	ctx.moveTo(curve.x, curve.y);
-
+	const startx = curve.x;
+	const starty = curve.y;
+	ctx.moveTo(startx, starty);
 	let prevcpx = curve.x;
 	let prevcpy = curve.y;
 	
+	
+
     for(var i=1; i < wave.length; i++){
 		curve = wave[i];
-		
         const cx = (prev.x + curve.x) / 2;
         const cy = (prev.y + curve.y) / 2;
+		const ct = (prev.t + curve.t) / 2;
+		// 위의 t값은 계속해서 vy값을 더해줄 움직임 변수.
+		// 기존 y값을 그대로 넣은것이 t값이다.
+		// y좌표값에 직접 vy를 계속 더하면 포인트의 절대좌표가 움직여버린다.
+
 		if(curve === wave[wave.length-1]){
         	ctx.quadraticCurveTo(cx,
-			cy+Math.sin(cy)*0.6*canvas.height/10,
+			cy+Math.sin(ct)*curve.height*canvas.height/10,
             canvas.width,
             canvas.height/2);			
 		}
 		else{
 		ctx.quadraticCurveTo(cx,
-        	(cy+Math.sin(cy)*0.6*canvas.height/10),
+        	(cy+Math.sin(ct)*curve.height*canvas.height/10),
             curve.x,
-            curve.y+Math.sin(curve.y)*0.6*canvas.height/10);		
+            curve.y+Math.sin(curve.t)*curve.height*canvas.height/10);		
 		}		
-            // ctx.lineTo(wave[i-1].x, 
-            //     wave[i-1].y+Math.sin(wave[i-1].y)*0.6*canvas.height/10,
-            //     x,
-            //     y);
-        // wave[i].x += wave[i].vx;
-        wave[i].y += wave[i].vy;
-
-        if(wave[i].y > canvas.height/2 + 30 || wave[i].y < canvas.height/2 -30){
-            wave[i].vy = -wave[i].vy;
-        }
+		
+        curve.t += curve.vy;
+		if(i === 1){
+			wave[0].t += curve.vy;
+		}
+		// curve.height += curve.vx;
+		// if (curve.height > 1|| curve.height < 0.1){
+		// 	curve.vx = -curve.vx;			
+		// }
 		prev = curve;
 		prevcpx = cx;
 		prevcpy = cy;
-                // vy를 계속 더하다보니 wave가 자꾸 아래로 간다.
-        // 그래서 넣어준 구문.
-   
-        // (x1+(x2-x1)/2)+(100);
-        // quadraticCurveTo 공부 단원에서 알아낸 수식.
     }
 
-	// ctx.lineTo(canvas.width,canvas.height/2);
-	// ctx.lineTo(canvas.width,canvas.height);
-	// ctx.lineTo(0,canvas.height);
-	// ctx.lineTo(wave[0].x,wave[0].y);
+
+	ctx.lineTo(canvas.width,canvas.height);
+	ctx.lineTo(0,canvas.height);
     ctx.fillStyle = "rgba("+r+","+g+","+b+","+alpha+")"
     ctx.fill();
 
@@ -192,7 +209,7 @@ function createwave(wavenum,r,g,b,alpha){
 
     
     for(var i=1; i < circleArr[wavenum].length; i++){
-   	 circleArr[wavenum][i].update();
+    	circleArr[wavenum][i].update();
     }
 
 	// 점을 없애보고 싶다면 위 loop를 주석처리하자.
