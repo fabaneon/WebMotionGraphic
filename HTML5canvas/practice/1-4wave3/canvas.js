@@ -27,7 +27,9 @@ function circle(x,y,vx,vy,t,radius,height,r,g,b,alpha){
 	this.radius = radius;
     this.draw = function(){
         ctx.beginPath();
-        ctx.arc(this.x,this.y+Math.sin(this.t)*this.height*canvas.height/10,this.radius,0,Math.PI * 2,false);
+		var nowY = 
+			this.y+Math.sin(this.t)*this.height*canvas.height/10;
+        ctx.arc(this.x,nowY,this.radius,0,Math.PI * 2,false);
         ctx.fillStyle = "rgba("+r+","+g+","+b+","+alpha+")"
         ctx.fill();
         ctx.strokeStyle = "red"
@@ -107,7 +109,7 @@ function dotcreate(x,y,vx,vy,t,radius,height,wavenum){
 			this.dotX = (this.x1*(1-this.t))+(this.x2*this.t);
 			this.dotY = (this.y1*(1-this.t))+(this.y2*this.t);
 			this.t += this.vx;		
-			console.log(this.x1 +" / "+ this.y1);
+			console.log(Math.floor(this.x1) +" / "+ Math.floor(this.y1));
 
 		}
 		this.draw();
@@ -197,13 +199,15 @@ function createwave(wavenum,r,g,b,alpha){
 		const cx = (prev.x + curve.x) / 2;
 		const cy = (prev.y + curve.y) / 2;
 		const ct = (prev.t + curve.t) / 2;
+		const midY = cy+Math.sin(ct)*curve.height*canvas.height/10;
+		const nowY = curve.y+Math.sin(curve.t)*curve.height*canvas.height/10;
 		// 위의 t값은 계속해서 vy값을 더해줄 움직임 변수.
 		// 기존 y값을 그대로 넣은것이 t값이다.
 		// y좌표값에 직접 vy를 계속 더하면 포인트의 절대좌표가 움직여버린다.
 
 		if(curve === wave[wave.length-1]){
 		ctx.quadraticCurveTo(cx,
-				cy+Math.sin(ct)*curve.height*canvas.height/10,
+				midY,
 				canvas.width,
 				canvas.height/2);			
 				dotlocationArr[wavenum].push({x: canvas.width, 
@@ -211,12 +215,12 @@ function createwave(wavenum,r,g,b,alpha){
 		}	
 		else{
 			ctx.quadraticCurveTo(cx,
-				(cy+Math.sin(ct)*curve.height*canvas.height/10),
+				(midY),
 				curve.x,
-				curve.y+Math.sin(curve.t)*curve.height*canvas.height/10);
+				nowY);
 				
 			dotlocationArr[wavenum].push({x: curve.x, 
-				y: curve.y+Math.sin(curve.t)*curve.height*canvas.height/10});
+				y: nowY});
 			}		
 
 		curve.t += curve.vy;
@@ -291,14 +295,15 @@ function animate(){
 	ctx.fillText("아무튼 이번 예제의 목적은 기존 wave 생성 로직에서 필요값들을 추출해",
 					 100, 150);
 	ctx.fillText("그 wave 위에서 움직이는 점을 만드는것이다.", 100, 180);
-	//ctx.fillText("비슷한 방식으로 각 중간점(circle)들도 생성해주면 wave 하나가 완성되는데", 100, 210);
-	//ctx.fillText("비슷한 방식으로 각 중간점(circle)들도 생성해주면 wave 하나가 완성되는데", 100, 210);
-	//ctx.fillText("이러한 wave를 다수 생성하는 방법은 각각 pointArr,circleArr 에 2차원 배열로", 100, 240);
-	//ctx.fillText("저장하고 이를 loop문을 통해 x,y,vx .. 등의 값과 wave 생성을 순차적으로 진행해주면 된다.", 100, 270);
-
-	//ctx.fillText("그이외 vy값은 무한히 y에 더해지므로 wave가 점점 아래로가거나 위로 가는데", 100, 330);
-	//ctx.fillText("이때문에 vy값을 반전시켜주는 구문을 추가해서 중간에 뚝 끊기며", 100, 360);
-	//ctx.fillText("잠시동안 wave가 왜곡되는 단점이 있다", 100, 390);
+	ctx.fillText("x1 시점 | x2 종점 | t = vx ", 100, 210);
+	ctx.fillText("1 = 시점부터 종점까지 임의의 거리", 100, 240);
+	ctx.fillText("dotX = 시점부터 종점까지 이동하는 선위의 점", 100, 270);
+	ctx.fillText(" 수식은 다음과 같다 | (x1*(1-t)+(x2*t)) = dotX", 500, 240);
+	ctx.fillText("여기서 dotX가 x2보다 클때 x1의 값을 x2로 갱신하고 checkpoint의 값을 1 올린뒤", 100, 330);
+	ctx.fillText("x2값을 location array의 checkpoint index값으로 다음 x2값을 가져와 갱신시키는 방식이다.", 100, 360);
+	ctx.fillText("y좌표또한 동일 일단 첫 시도에선 sin함수는 사용하지 않아서 직선위를 움직이는 점인셈이다.", 100, 390);
+	ctx.fillText("두번째에선 update 펑션 안에서 x1,x2가 실시간으로  갱신되도록 설정하였다.", 100, 480);
+	ctx.fillText("일단 그리드를 따라 대강 움직이는건 다 움직인다. 마지막 부분이 캔버스 규격에 따라 가끔  움직임이 이상해지긴 하는데 일단 90%는 완성한셈이다.", 100, 520);
 
 
 }
