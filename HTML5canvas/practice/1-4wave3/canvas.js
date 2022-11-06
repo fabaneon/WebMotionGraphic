@@ -24,9 +24,7 @@ function circle(x,y,vx,vy,t,radius,height,r,g,b,alpha){
     this.vy = vy;
 	this.t = t;
 	this.height = height;
-	
 	this.radius = radius;
-
     this.draw = function(){
         ctx.beginPath();
         ctx.arc(this.x,this.y+Math.sin(this.t)*this.height*canvas.height/10,this.radius,0,Math.PI * 2,false);
@@ -57,15 +55,11 @@ function dotcreate(x,y,vx,vy,t,radius,height,wavenum){
 	this.setup = function(){
 		this.dotX = x;
 		this.dotY = y;
-		this.vx = vx;
-		this.vy = vy;
+		this.vx = vx/2;
+		this.vy = vy/2;
 		this.t = t;
 		this.height = height;
 		this.radius = radius;
-		this.x1 = this.dotX;
-		this.y1 = this.dotY;
-		this.x2 = dotlocationArr[wavenum][1].x;
-		this.y2 = dotlocationArr[wavenum][1].y;
 		checkpoint = 0;
 	}
 	this.setup();
@@ -88,24 +82,33 @@ function dotcreate(x,y,vx,vy,t,radius,height,wavenum){
 		// this.t += this.vy;
 		// console.log(this.dotY+Math.sin(this.t)*this.height*canvas.height/10);
 	
-		if(this.dotX > canvas.width){
+		if(checkpoint >= dotlocationArr[wavenum].length-1){
 			this.setup();
 		}
-		else if(this.dotX > this.x2){
+		else if(Math.round(this.dotX) > Math.round(this.x2)){
+				checkpoint += 1;
 				console.log(this.dotY);
+				this.dotX = this.x2
 				this.x1 = this.x2;
 				this.x2 = dotlocationArr[wavenum][checkpoint].x;
 				this.y1 = this.y2;
 				this.y2 = dotlocationArr[wavenum][checkpoint].y;
-				checkpoint += 1;
 				this.t = 0;
 				console.log("check!" + checkpoint);
 				console.log(this.y1 + " / " + this.y2);
 		}
 		else{
+			console.log(checkpoint);
+			this.x1 = dotlocationArr[wavenum][checkpoint].x;
+			this.x2 = dotlocationArr[wavenum][checkpoint+1].x;
+			this.y1 = dotlocationArr[wavenum][checkpoint].y;
+			this.y2 = dotlocationArr[wavenum][checkpoint+1].y;
+			
 			this.dotX = (this.x1*(1-this.t))+(this.x2*this.t);
 			this.dotY = (this.y1*(1-this.t))+(this.y2*this.t);
 			this.t += this.vx;		
+			console.log(this.x1 +" / "+ this.y1);
+
 		}
 		this.draw();
 	}
