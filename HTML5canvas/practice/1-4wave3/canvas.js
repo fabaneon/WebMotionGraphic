@@ -302,8 +302,7 @@ function animate(){
 	ctx.fillText("여기서 dotX가 x2보다 클때 x1의 값을 x2로 갱신하고 checkpoint의 값을 1 올린뒤", 100, 330);
 	ctx.fillText("x2값을 location array의 checkpoint index값으로 다음 x2값을 가져와 갱신시키는 방식이다.", 100, 360);
 	ctx.fillText("y좌표또한 동일 일단 첫 시도에선 sin함수는 사용하지 않아서 직선위를 움직이는 점인셈이다.", 100, 390);
-	ctx.fillText("두번째에선 update 펑션 안에서 x1,x2가 실시간으로  갱신되도록 설정하였다.", 100, 480);
-	ctx.fillText("일단 그리드를 따라 대강 움직이는건 다 움직인다. 마지막 부분이 캔버스 규격에 따라 가끔  움직임이 이상해지긴 하는데 일단 90%는 완성한셈이다.", 100, 520);
+	ctx.fillText("두번째에선 update 펑션 안에서 x1,x2가 실시간으로  갱신되도록 설정하였다.", 100, 420);
 
 
 }
