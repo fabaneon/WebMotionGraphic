@@ -13,6 +13,52 @@ let y = canvas.height/2;
 
 let t = y;
 
+function dotcreate(x,y,vx,vy,t,radius,height){
+	this.x = x;
+	this.y = y;
+	this.vx = vx;
+	this.vy = vy;
+	this.t = t;
+	this.height = height;
+	this.radius = radius;
+
+	this.draw = function(){
+		
+		ctx.beginPath();
+		ctx.arc(this.x,
+				this.y+Math.sin(this.t)*this.height*canvas.height/10,
+				this.radius,0,Math.PI*2,false);
+		ctx.fillStyle = "pink";
+		ctx.fill();	
+		ctx.strokeStyle = "black";
+		ctx.stroke();
+		console.log(this.x +" / "+ this.y);
+
+	}
+	this.update = function(){
+		this.x += canvas.width/50*10*this.vx;
+		this.t += this.vy;
+		
+		
+		
+		if(this.x < 0 || this.x > canvas.width){
+			this.vx = this.vx * (-1);
+		}
+		if(this.x > canvas.width){
+			this.x = canvas.width;
+			console.log("over");
+		}
+		else if(this.x < 0){
+			this.x = 0;
+			console.log("down");
+		}
+		this.draw();
+	}
+	
+}
+
+
+var dot = new dotcreate(0,y,0.05,0.05,y,6,0.6);
 function animate(){
 	requestAnimationFrame(animate);
 	ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -24,24 +70,13 @@ function animate(){
 		   Math.PI*2,
 		   false);
 	t += 0.05;
-	ctx.arc(x,
-            y+1+Math.sin(t)*0.5*canvas.height/100,
-		   5,
-		   0,
-		   Math.PI*2,
-		   false);
-	t += 0.05;
-	ctx.arc(x-100,
-            y+Math.sin(t)*0.5*canvas.height/100,
-		   5,
-		   0,
-		   Math.PI*2,
-		   false);
-
+	
 	ctx.storkeStyle = "red";
 	ctx.stroke();
 	t += 0.05;
-	console.log(y);
+
+	dot.update();
+	
 	
 	ctx.textAlign="center";
 	ctx.fillStyle = "red";

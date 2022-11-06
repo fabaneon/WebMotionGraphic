@@ -7,14 +7,7 @@ const ctx = canvas.getContext("2d");
 
 // 3-1. 텍스트 그리기(기본)
 
-출처: https://curryyou.tistory.com/331 [카레유:티스토리]
-// window.addEventListener("resize",
-//     function(){
-//         canvas.width = window.innerWidth;
-//         canvas.height = window.innerHeight;
-//     }
 
-// )
 
 window.addEventListener("resize",
     function(){
@@ -55,44 +48,64 @@ function circle(x,y,vx,vy,t,radius,height,r,g,b,alpha){
 
 }
 
-function dotcreate(x,y,vx,vy,t,radius,height){
-	this.x = x;
-	this.y = y;
-	this.vx = vx;
-	this.vy = vy;
-	this.t = t;
-	this.height = height;
 
-	this.radius = radius;
-
+function dotcreate(x,y,vx,vy,t,radius,height,wavenum){
+	
+	console.log(dotlocationArr[wavenum]);
+	
+	var checkpoint = null;
+	this.setup = function(){
+		this.dotX = x;
+		this.dotY = y;
+		this.vx = vx;
+		this.vy = vy;
+		this.t = t;
+		this.height = height;
+		this.radius = radius;
+		this.x1 = this.dotX;
+		this.y1 = this.dotY;
+		this.x2 = dotlocationArr[wavenum][1].x;
+		this.y2 = dotlocationArr[wavenum][1].y;
+		checkpoint = 0;
+	}
+	this.setup();
 	this.draw = function(){
 		
 		ctx.beginPath();
-		ctx.arc(this.x,
-				this.y+Math.sin(this.t)*this.height*canvas.height/10,
-				this.radius,0,Math.PI*2,false);
+		ctx.arc(this.dotX,
+				// this.dotY+Math.sin(this.t)*this.height*canvas.height/10,
+				this.dotY,
+				this.radius,0,
+				Math.PI*2,false);
 		ctx.fillStyle = "pink";
 		ctx.fill();	
-		ctx.strokeStyle = "black";
+		ctx.strokeStyle = "red";
 		ctx.stroke();
 
 	}
 	this.update = function(){
-		this.x += 10*this.vx;
-		this.t += this.vy;
-		
-		
-		
-		if(this.x < 0 || this.x > canvas.width){
-			this.vx = this.vx * (-1);
+		// this.dotX += dotlocationArr.length*this.vx*100;
+		// this.t += this.vy;
+		// console.log(this.dotY+Math.sin(this.t)*this.height*canvas.height/10);
+	
+		if(this.dotX > canvas.width){
+			this.setup();
 		}
-		if(this.x > canvas.width){
-			this.x = canvas.width;
-			console.log("over");
+		else if(this.dotX > this.x2){
+				console.log(this.dotY);
+				this.x1 = this.x2;
+				this.x2 = dotlocationArr[wavenum][checkpoint].x;
+				this.y1 = this.y2;
+				this.y2 = dotlocationArr[wavenum][checkpoint].y;
+				checkpoint += 1;
+				this.t = 0;
+				console.log("check!" + checkpoint);
+				console.log(this.y1 + " / " + this.y2);
 		}
-		else if(this.x < 0){
-			this.x = 0;
-			console.log("down");
+		else{
+			this.dotX = (this.x1*(1-this.t))+(this.x2*this.t);
+			this.dotY = (this.y1*(1-this.t))+(this.y2*this.t);
+			this.t += this.vx;		
 		}
 		this.draw();
 	}
@@ -101,16 +114,19 @@ function dotcreate(x,y,vx,vy,t,radius,height){
 
 
 
-var waveArr = [[],[]];
-var circleArr = [[],[]];
+
+var waveArr = [[]];
+var circleArr = [[]];
 var dotArr = [];
+var dotlocationArr = [[]];
+
 
 
 function wavesetup(){
 	
     for(var a=0; a < waveArr.length; a++){
 		
-		var density = 30;
+		var density = 12;
 		var space = canvas.width / density;
 
 		var waveHeight = 0.6;
@@ -127,29 +143,35 @@ function wavesetup(){
         var vx = (0.1) * 0.5; 
         var vy = (0.1) * 0.5; 
 
-		dotArr.push(new dotcreate(x,y,vx,vy,radius));
 		
 		for(var i=0; x < canvas.width; i++, x+= space){
 			
-			waveArr[a].push({x: x, y: y, vx: vx, vy: vy,t:y+i,ct:y+i, radius: radius, height: waveHeight});
-			circleArr[a].push(new circle(x,y,vx,vy,y+i,radius, waveHeight));				
-			console.log(Math.round(x));
+			waveArr[a].push({x: x, y: y, vx: vx, vy: vy,t:y+i+a,ct:y+i+a, radius: radius, height: waveHeight});
+			circleArr[a].push(new circle(x,y,vx,vy,y+i+a,radius, waveHeight));				
+			dotlocationArr[a].push({x: x, y:y});
 
 		}
 		circleArr[a].pop();				
-		
-    }
 		console.log("wave number : ");
 		console.log(waveArr);
 
 		console.log("circleNumber : ");
 		console.log(circleArr);
+		console.log("dotlocation : ");
+		console.log(dotlocationArr);
+	
+		dotArr.push(new dotcreate(0,y,vx,vy,0,radius,waveHeight,a));
+		console.log("dotNumber : ");
+		console.log(dotArr);
+    }
+
+
 }
 wavesetup();
 
 function init(){
-    waveArr = [[],[]];    
-    circleArr = [[],[]];
+    waveArr = [[]];    
+    circleArr = [[]];
 	dotArr = [];
     wavesetup();
 }
@@ -164,31 +186,37 @@ function createwave(wavenum,r,g,b,alpha){
 	let prevcpx = curve.x;
 	let prevcpy = curve.y;
 	
+	dotlocationArr = [[]];
+	dotlocationArr[wavenum].push({x: curve.x, y:curve.y});
 	
-
-    for(var i=1; i < wave.length; i++){
+	for(var i=1; i < wave.length; i++){
 		curve = wave[i];
-        const cx = (prev.x + curve.x) / 2;
-        const cy = (prev.y + curve.y) / 2;
+		const cx = (prev.x + curve.x) / 2;
+		const cy = (prev.y + curve.y) / 2;
 		const ct = (prev.t + curve.t) / 2;
 		// 위의 t값은 계속해서 vy값을 더해줄 움직임 변수.
 		// 기존 y값을 그대로 넣은것이 t값이다.
 		// y좌표값에 직접 vy를 계속 더하면 포인트의 절대좌표가 움직여버린다.
 
 		if(curve === wave[wave.length-1]){
-        	ctx.quadraticCurveTo(cx,
-			cy+Math.sin(ct)*curve.height*canvas.height/10,
-            canvas.width,
-            canvas.height/2);			
-		}
-		else{
 		ctx.quadraticCurveTo(cx,
-        	(cy+Math.sin(ct)*curve.height*canvas.height/10),
-            curve.x,
-            curve.y+Math.sin(curve.t)*curve.height*canvas.height/10);		
-		}		
-		
-        curve.t += curve.vy;
+				cy+Math.sin(ct)*curve.height*canvas.height/10,
+				canvas.width,
+				canvas.height/2);			
+				dotlocationArr[wavenum].push({x: canvas.width, 
+					y: canvas.height/2});
+		}	
+		else{
+			ctx.quadraticCurveTo(cx,
+				(cy+Math.sin(ct)*curve.height*canvas.height/10),
+				curve.x,
+				curve.y+Math.sin(curve.t)*curve.height*canvas.height/10);
+				
+			dotlocationArr[wavenum].push({x: curve.x, 
+				y: curve.y+Math.sin(curve.t)*curve.height*canvas.height/10});
+			}		
+
+		curve.t += curve.vy;
 		if(i === 1){
 			wave[0].t += curve.vy;
 		}
@@ -199,16 +227,15 @@ function createwave(wavenum,r,g,b,alpha){
 		prev = curve;
 		prevcpx = cx;
 		prevcpy = cy;
-    }
-
+	}
 
 	ctx.lineTo(canvas.width,canvas.height);
 	ctx.lineTo(0,canvas.height);
-    ctx.fillStyle = "rgba("+r+","+g+","+b+","+alpha+")"
-    ctx.fill();
+	ctx.fillStyle = "rgba("+r+","+g+","+b+","+alpha+")"
+	ctx.fill();
 
-    ctx.strokeStyle = "rgba("+r+","+g+","+b+","+255+")";
-    ctx.stroke();
+	ctx.strokeStyle = "rgba("+r+","+g+","+b+","+255+")";
+	ctx.stroke();
 
 
     
@@ -221,9 +248,9 @@ function createwave(wavenum,r,g,b,alpha){
 }
 
 
-var r = 1 * Math.random()* 30;
-var g = 1 * Math.random()* 60;
-var b = 1 * Math.random()* 90;
+var r = 1 * Math.random()* 50;
+var g = 1 * Math.random()* 100;
+var b = 1 * Math.random()* 150;
 
 
 function animate(){
@@ -234,23 +261,23 @@ function animate(){
     ctx.fill();
     ctx.fillRect(0,0,canvas.width,canvas.height);
     for(var i=0; i < waveArr.length; i++){
-        createwave(i,  r*i+30,  g-i+30, b/i+30,0.4);
+        createwave(i,  r,  g, b,0.4);
     }	// createwave(몇번째 wave인지,     r,  g,   b,   0.5);
 
 	
-	// for(var i=1; i < dotArr.length; i++){
-	// dotArr[1].update();
-	// 	console.log(dotArr[1]);
-	// }
 	
-    dotArr[1].update();
-
+	
+	
 	ctx.beginPath();
 	ctx.moveTo(0,canvas.height/2);
 	ctx.lineTo(canvas.width,canvas.height/2);
 	ctx.strokeStyle = "red";
 	ctx.stroke();
 
+	dotArr.forEach((dot,index)=>{
+		dot.update();
+	});
+	
 	ctx.fillStyle = "black";
 	ctx.font = "italic bold 48px Arial"; //Arial 적용
 	ctx.fillText("Wave 활용", 100, 60);
