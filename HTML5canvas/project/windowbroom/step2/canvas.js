@@ -56,9 +56,18 @@ window.addEventListener("resize", function(){
 	function createupperWater(x,y,radius,v,t,max,i){
 		this.x = x;
 		this.y = y;
-		this.radius = radius;
-		this.v = v * ((Math.random() * 1) * -1);
+		this.radius = radius/2;
+		this.v = v/2;
 		this.t = t;
+		
+		
+		this.drop = false;
+		
+		this.waterradius = 10;
+		this.waterX = x;
+		this.waterY = (y + radius);
+		this.waterAlpha = 0;
+		this.waterV = v;
 		
 		console.log(v);
 		
@@ -71,13 +80,44 @@ window.addEventListener("resize", function(){
 			ctx.fill();
 			
 		}
+		this.waterdrop = function(){
+			ctx.fillStyle = "rgba(60,70,250,1)"
+			ctx.beginPath()
+			ctx.arc(this.waterX,this.waterY,this.waterradius,0,Math.PI*2,false);
+			ctx.fill();
+			
+		}
 		
 		this.update = function(){
-			if(this.radius < radius/2 || this.radius > radius){
-				this.v *= -1;
+			if(this.radius > radius){
+				this.v = (v+radius/100)*(-1);
+				this.drop = true;
+			}
+			else if(this.radius < radius/2){
+				this.radius = radius/2;
+				this.v = v;
 			}
 			
 			this.radius += this.v;
+
+			if(this.waterY > canvas.height || 
+			   (	this.waterX > mouse.x-30 - this.waterradius && 
+				  this.waterX < mouse.x+30 + this.waterradius&&
+				  this.waterY > mouse.y-15 - this.waterradius&&
+				  this.waterY < mouse.y+50 + this.waterradius&&
+			   	  mouse.sponge
+			   )
+			  ){
+				this.drop = false;
+				this.waterY = y + radius;
+				this.waterV = v;
+			}
+			
+			if(this.drop){
+				this.waterY += this.waterV;
+				this.waterV += this.waterV/10;
+				this.waterdrop();
+			}
 			
 			
 			
@@ -249,9 +289,25 @@ function animate(){
 	requestAnimationFrame(animate);
 	ctx.clearRect(0,0,canvas.width,canvas.height);
 	
+	ctx.fillStyle = "black"
+
+	ctx.font = "bold 24px Arial";
+	ctx.fillText("Step.2 떨어지는 물방울", 100,120);    
+
+	ctx.font = "bold 12px Arial";
+	ctx.fillText("기존 서리만 끼는 예제에서 약간의 역동감을 더해보았다", 100,200);    
+	ctx.fillText("화면 상단의 파란 서리가 커지면 물방울을 떨어트리며 작아지는 모션.", 100,240);    
+
+	ctx.fillText("이전 행정반에서 작업했던 notepad 코딩에선 생각보다",100,280);  
+	ctx.fillText("복잡하게 구현했는데 이번엔 의외로 단순하게 작업했다.",100,320);  
+	ctx.fillText("처음 contextsetup에서 만드는 upperwaterArr 속 createuppderwater 함수에다",100,360);
+	ctx.fillText("개별 this.waterdrop 요소를 추가해준 후 지역변수 boolean값으로 이를 조정하는것",100,380);  
+	ctx.fillText("이 물방울은 화면밖으로 나가면 사라지며 중간에 스폰지에 닿아도 사라진다.",100,400); 
+	
 	Contentsdraw();
 	
 	SpongeBox();
 	
+
 }
 animate();
