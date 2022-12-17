@@ -59,13 +59,20 @@ function animate(){
 	
 	ctx.font = "bold 24px Arial";
 	
-	ctx.fillText("MetaBall 효과", 100,100);
+	ctx.fillText("MetaBall 기법", 100,100);
 
 	ctx.font = "bold 16px Arial";
 
 	ctx.fillText("구와 구 사이의 거리를 기본값으로", 100,140);
 
 	ctx.fillText("두 구 사이의 도형을 Merging 해주는 기법이다.", 100,180);
+	
+	ctx.fillText("MetaBall의 구현방법중 기존 그래픽 구현방식과의 명확한 차이는", 100,240);
+	
+	ctx.fillText("메타볼은 픽셀과 도형값을 다르게 저장한다는 것이다.", 100,260);
+	ctx.fillText("화면을 보면 알 수 있듯 미세하게 작은 점의 색상을 바꿔주는것으로 도형을 포현하며", 100,300);
+	ctx.fillText("그 도형 표현을 위한 상세값들은 배열에 저장되어있어 이를 읽어온 후 ", 100,320);
+	ctx.fillText("도형 내 좌표에 해당되는 점 색상을 바꿔주는 방식인듯 하다.", 100,340);
 }
 console.log(metaballs);
 
