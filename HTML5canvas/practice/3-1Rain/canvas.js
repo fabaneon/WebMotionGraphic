@@ -5,6 +5,20 @@ canvas.height = window.innerHeight;
 
 const ctx = canvas.getContext("2d");
 
+let mouse = {
+	x: 0,
+	y: 0,
+	click: false,
+	drag: false,
+	
+};
+
+window.addEventListener("mousemove",function(){
+	mouse.x = event.clientX - canvas.offsetLeft + window.scrollX;
+	mouse.y = event.clientY - canvas.offsetTop + window.scrollY;
+
+});
+
 
 
 function distance(x0, y0, x1, y1, m){
@@ -16,10 +30,17 @@ var density = 60;
 var space = canvas.width/density;
 var metaballs = [];
 for (var i = 0; i < canvas.width; i+=space) {
+	
+	var scale = 4005*(Math.random())+365;
+	
 	metaballs.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height,
-	m: 2075*(Math.random())+565, xvel: 6*(Math.random()-0.5), yvel: 6*(Math.random()-0.5), vx: 1*(Math.random())+0.5, vy:1*(Math.random())+0.5});
+	m: scale,mt: scale, xvel: 6*(Math.random()-0.5), yvel: 6*(Math.random()-0.5), vx: 1*(Math.random())+0.5, vy:1*(Math.random())+0.5,
+	sponge: false			   
+				   });
+	
+
 }
-var constant = 10;
+var constant = 15;
 
 
 
@@ -27,23 +48,58 @@ function render(metaballs) {
 	var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 	for (var i = 0; i < imageData.data.length; i+=density) {
 		imageData.data[i] = 255*(constant > sumMetaballs((i/4)%canvas.width, ~~((i/4)/canvas.width), metaballs));
+					// 여기부터 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 끝까지 부등호를 대었을때 참이라면 1 아니면 0을 이용한것. 
+					// 이걸로 각 픽셀점의 색상을 변형시키는것.
+					
+		
 		imageData.data[i+1] = 255*(constant > sumMetaballs((i/4)%canvas.width, ~~((i/4)/canvas.width), metaballs));
 		imageData.data[i+2] = 15*(constant > sumMetaballs((i/4)%canvas.width, ~~((i/4)/canvas.width), metaballs));
 		imageData.data[i+3] = 255;
 	}
 	ctx.putImageData(imageData, 0, 0);
 	
+	var controller = metaballs[metaballs.length-1];
+	
 	metaballs.forEach((ball,index)=>{
-		if(ball.x > canvas.width || ball.x < 0){
-			ball.vx = ball.vx*(-1);
+
+		if(ball === controller){
+			ball.x = mouse.x;
+			ball.y = mouse.y;
+			ball.m = 6000;
+			
 		}
-		if(ball.y > canvas.height || ball.y < 0){
-			ball.y = 1+Math.random()*canvas.height/1.5;
-			ball.vy = 1*(Math.random())+0.5;
+		
+		else{
+			if(ball.x < controller.x+30 && ball.x > controller.x-30 &&
+			  	ball.y < controller.y +30 && ball.y > controller.y -30){
+				ball.vy = 0;
+				ball.vy = 1*(Math.random())+2.5;
+			}
+
+			else{
+				if(ball.m < ball.mt){
+					ball.vy = 0;
+					ball.m += 0.1;
+					ball.vy = 1*(Math.random())+0.5;
+				}
+				else{  
+					ball.x += ((-1*Math.random())+0.5)*1.5;
+					ball.y += ball.vy;
+					ball.vy += ball.vy/50;
+
+				}
+				
+				if(ball.x > canvas.width || ball.x < 0){
+					ball.vx = ball.vx*(-1);
+				}
+				if(ball.y > canvas.height || ball.y < 0){
+					ball.y = 1+Math.random()*canvas.height/1.5;
+					ball.vy = 1*(Math.random())+0.5;
+				}
+			}
 		}
-		ball.x += 1*(Math.random())-0.5;
-		ball.y += ball.vy;
-		ball.vy += ball.vy/30;
+		
+		
 	}) 
 	
 }
@@ -55,10 +111,19 @@ function sumMetaballs(x, y, metaballs) {
 	return sum;
 }
 
+function makeArc(){
+	ctx.beginPath();
+	ctx.arc(mouse.x,mouse.y,30,0,Math.PI*2,false);
+	ctx.strokeStyle = "rgba(255,255,30,1)";
+	ctx.stroke();
+}
+
 function animate(){
 	requestAnimationFrame(animate);
-	
+	ctx.clearRect(0,0,canvas.width,canvas.height);
 	render(metaballs);
+	
+	makeArc();
 	ctx.fillStyle= "white";
 	
 	ctx.font = "bold 24px Arial";
