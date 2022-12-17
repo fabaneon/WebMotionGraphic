@@ -67,7 +67,7 @@ window.addEventListener("resize", function(){
 		this.waterX = x;
 		this.waterY = (y + radius);
 		this.waterAlpha = 0;
-		this.waterVY = v;
+		this.waterV = v;
 		
 		console.log(v);
 		
@@ -90,7 +90,7 @@ window.addEventListener("resize", function(){
 		
 		this.update = function(){
 			if(this.radius > radius){
-				this.v = (v+radius/50)*(-1);
+				this.v = (v+radius/100)*(-1);
 				this.drop = true;
 			}
 			else if(this.radius < radius/2){
@@ -98,7 +98,7 @@ window.addEventListener("resize", function(){
 				this.v = v;
 			}
 			
-			this.radius += this.v*2;
+			this.radius += this.v;
 
 			if(this.waterY > canvas.height || 
 			   (	this.waterX > mouse.x-30 - this.waterradius && 
@@ -110,12 +110,12 @@ window.addEventListener("resize", function(){
 			  ){
 				this.drop = false;
 				this.waterY = y + radius;
-				this.waterVY = v;
+				this.waterV = v;
 			}
 			
 			if(this.drop){
-				this.waterY += this.waterVY;
-				this.waterVY += this.waterVY/10;
+				this.waterY += this.waterV;
+				this.waterV += this.waterV/10;
 				this.waterdrop();
 			}
 			
@@ -162,8 +162,8 @@ window.addEventListener("resize", function(){
 					}
 				}
 				else{
-					if(this.alpha >= 1){
-						this.alpha = 1;
+					if(this.alpha >= 0.7){
+						this.alpha = 0.7;
 					}
 					else{
 						this.alpha += this.recreate;
@@ -173,8 +173,8 @@ window.addEventListener("resize", function(){
 			}
 			
 			else{
-					if(this.alpha >= 1){
-						this.alpha = 1;
+					if(this.alpha >= 0.7){
+						this.alpha = 0.7;
 					}
 					else{
 						this.alpha += this.recreate;
@@ -292,13 +292,13 @@ function animate(){
 	ctx.fillStyle = "black"
 
 	ctx.font = "bold 24px Arial";
-	ctx.fillText("Step.2 떨어지는 물방울", 100,120);    
+	ctx.fillText("Step.3 사실적인 물표현", 100,120);    
 
 	ctx.font = "bold 12px Arial";
-	ctx.fillText("기존 서리만 끼는 예제에서 약간의 역동감을 더해보았다", 100,200);    
-	ctx.fillText("화면 상단의 파란 서리가 커지면 물방울을 떨어트리며 작아지는 모션.", 100,240);    
+	ctx.fillText("이번엔 MetaBall 효과를 구현해볼것이다.", 100,200);    
+	ctx.fillText("액체끼리 맞붙었을때 끈적한듯 점성이 있는 모습을 표현하는 기법이다..", 100,240);    
 
-	ctx.fillText("이전 행정반에서 작업했던 notepad 코딩에선 생각보다",100,280);  
+	ctx.fillText("ㅁㄴ",100,280);  
 	ctx.fillText("복잡하게 구현했는데 이번엔 의외로 단순하게 작업했다.",100,320);  
 	ctx.fillText("처음 contextsetup에서 만드는 upperwaterArr 속 createuppderwater 함수에다",100,360);
 	ctx.fillText("개별 this.waterdrop 요소를 추가해준 후 지역변수 boolean값으로 이를 조정하는것",100,380);  

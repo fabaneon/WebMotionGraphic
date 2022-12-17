@@ -53,7 +53,7 @@ window.addEventListener("resize", function(){
 
 
 
-	function createupperWater(x,y,radius,v,t,max,i){
+	function createupperWater(x,y,radius,v,t,max,num){
 		this.x = x;
 		this.y = y;
 		this.radius = radius;
