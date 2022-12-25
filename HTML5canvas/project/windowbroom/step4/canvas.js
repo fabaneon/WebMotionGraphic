@@ -298,11 +298,11 @@ function animate(){
 	ctx.fillText("이번엔 MetaBall 효과를 구현해볼것이다.", 100,200);    
 	ctx.fillText("액체끼리 맞붙었을때 끈적한듯 점성이 있는 모습을 표현하는 기법이다..", 100,240);    
 
-	ctx.fillText("결론부터 말하자면 반은 접목 불가, 반은 가능이다.",100,280);  
-	ctx.fillText("애초에 메타볼 기법은 현재 Shape들을 구현하는 방식과 완전히 다른 방법으로 구현된다.",100,320);  
-	ctx.fillText("따라서 waterdrop만 메타볼 기법을 적용하여 구현해보려 하는데",100,360);
-	ctx.fillText("하지만 이럴경우 창문에 끼는 서리 역시 생성 방식을 바꿔야함으로 메타볼 기법은 Step 5. 로 미루겠다.",100,380);  
-	ctx.fillText("자세한건 메타볼 기법 연습 카테고리에서 확인, 이 단계는 WebGL 학습 이후 다뤄야겠다.",100,400); 
+	ctx.fillText("ㅁㄴ",100,280);  
+	ctx.fillText("복잡하게 구현했는데 이번엔 의외로 단순하게 작업했다.",100,320);  
+	ctx.fillText("처음 contextsetup에서 만드는 upperwaterArr 속 createuppderwater 함수에다",100,360);
+	ctx.fillText("개별 this.waterdrop 요소를 추가해준 후 지역변수 boolean값으로 이를 조정하는것",100,380);  
+	ctx.fillText("이 물방울은 화면밖으로 나가면 사라지며 중간에 스폰지에 닿아도 사라진다.",100,400); 
 	
 	Contentsdraw();
 	
