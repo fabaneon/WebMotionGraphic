@@ -76,14 +76,14 @@ window.addEventListener("resize", function(){
 		let setRdadius = radius;
 		
 		this.draw = function (){
-			ctx.fillStyle = "rgba(20,0,200,0.1)"
+			ctx.fillStyle = "rgba(30,50,90,1)"
 			ctx.beginPath();
 			ctx.arc(this.x,this.y,this.radius,0,Math.PI*2,false);
 			ctx.fill();
 
 			ctx.fillStyle = "red";
 			ctx.beginPath();
-			ctx.arc(this.x,this.bottomPoint,1,0,Math.PI*2,false);
+			ctx.arc(this.x,this.bottomPoint,4,0,Math.PI*2,false);
 			ctx.fill();
 		}
 		this.waterdrop = function(){
@@ -205,7 +205,7 @@ function contextSetup(){
 	
 	let y = 0;
 	const v = (0.1) * 0.5;
-	const max = 20;
+	const max = 30;
 	var radius = max;
 	
 	const density = canvas.width/radius;
@@ -254,7 +254,7 @@ function Contentsdraw(){
 	var now = null;
 	var cpx, cpy = null;	
 	
-	ctx.fillStyle = "rgba(30,50,90,0.8)";
+	ctx.fillStyle = "rgba(30,50,90,1)";
 	ctx.moveTo(0,0);
 	ctx.lineTo(prev.x,prev.bottomPoint);
 	
@@ -272,8 +272,8 @@ function Contentsdraw(){
 		}
 		ctx.lineTo(canvas.width,upperWaterArr[0].bottomPoint);
 		ctx.lineTo(canvas.width,0);
-		ctx.strokeStyle = "black";
-		ctx.stroke();
+		//ctx.strokeStyle = "black";
+		//ctx.stroke();
 		ctx.fill();
 
 	}
