@@ -65,7 +65,7 @@ window.addEventListener("resize", function(){
 		
 		this.drop = false;
 		
-		this.waterradius = 10;
+		this.waterradius = 15;
 		this.waterX = x;
 		this.waterY = (y + radius);
 		this.waterAlpha = 0;
@@ -263,7 +263,7 @@ function contextSetup(){
 	
 	let y = 0;
 	const v = (0.1) * 0.5;
-	const max = 30;
+	const max = 40;
 	var radius = max;
 	
 	const density = canvas.width/radius;
