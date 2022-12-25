@@ -53,10 +53,11 @@ window.addEventListener("resize", function(){
 
 
 
-	function createupperWater(x,y,radius,v,t,max,i){
+	function createupperWater(x,y,radius,v,t,max,number){
 		this.x = x;
 		this.y = y;
 		this.radius = radius/2;
+
 		this.v = v/2;
 		this.t = t;
 		this.bottomPoint = this.y + this.radius;
@@ -69,6 +70,12 @@ window.addEventListener("resize", function(){
 		this.waterY = (y + radius);
 		this.waterAlpha = 0;
 		this.waterV = v;
+		this.watertop = this.waterY - this.waterradius;
+		this.waterbottom = this.waterY + this.waterradius;
+		this.waterleft = this.waterX - this.waterradius;
+		this.waterright = this.waterX + this.waterradius;
+		
+		this.number = number;
 		
 		
 		console.log(v);
@@ -76,7 +83,7 @@ window.addEventListener("resize", function(){
 		let setRdadius = radius;
 		
 		this.draw = function (){
-			ctx.fillStyle = "rgba(30,50,90,1)"
+			ctx.fillStyle = "rgba(30,50,90,0.1)"
 			ctx.beginPath();
 			ctx.arc(this.x,this.y,this.radius,0,Math.PI*2,false);
 			ctx.fill();
@@ -92,20 +99,65 @@ window.addEventListener("resize", function(){
 			ctx.arc(this.waterX,this.waterY,this.waterradius,0,Math.PI*2,false);
 			ctx.fill();
 			
+			
+			ctx.fillStyle = "brown";
+			ctx.beginPath();
+			ctx.arc(this.waterX,this.waterbottom,2,0,Math.PI*2,false);
+			ctx.fill();
+			
+			ctx.fillStyle = "brown";
+			ctx.beginPath();
+			ctx.arc(this.waterleft,this.waterY,2,0,Math.PI*2,false);
+			ctx.fill();
+			
+			ctx.fillStyle = "brown";
+			ctx.beginPath();
+			ctx.arc(this.waterright,this.waterY,2,0,Math.PI*2,false);
+			ctx.fill();
+
+
+			ctx.fillStyle = "red";
+			ctx.beginPath();
+			ctx.arc(this.waterX+this.waterradius/2,this.watertop,2,0,Math.PI*2,false);
+			ctx.arc(this.waterX-this.waterradius/2,this.watertop,2,0,Math.PI*2,false);
+			ctx.fill();
+			
+		}
+
+		this.prevpoint = upperWaterArr[number-1];
+		this. prev
+		
+		
+		this.waterline = function(){
+			ctx.strokeStyle="black";
+			ctx.fillStyle = "rgba(60,70,250,1)";
+			ctx.beginPath();
+			ctx.moveTo(this.x,this.bottomPoint);
+			ctx.lineTo(this.waterX+this.waterradius/2,this.watertop);
+			ctx.lineTo(this.waterX-this.waterradius/2,this.watertop);
+			ctx.fill();
+			ctx.stroke();
 		}
 		
 		this.update = function(){
-			if(this.radius > radius){
-				this.v = (v+radius/100)*(-1);
-				this.drop = true;
-			}
-			else if(this.radius < radius/2){
-				this.radius = radius/2;
-				this.v = v;
+			
+
+			if(number%2 === 0){ 
+				if(this.radius > radius){
+					this.v = (v+radius/100)*(-1);
+					this.drop = true;
+					
+				}
+				else if(this.radius < radius/2){
+					this.radius = radius/2;
+					this.v = v;
+					this.waterY = this.radius + this.y;
+				}
+						
+					this.radius += this.v*5;
+				
 			}
 			
-			this.radius += this.v*5;
-
 			if(this.waterY > canvas.height || 
 			   (	this.waterX > mouse.x-30 - this.waterradius && 
 				  this.waterX < mouse.x+30 + this.waterradius&&
@@ -115,18 +167,24 @@ window.addEventListener("resize", function(){
 			   )
 			  ){
 				this.drop = false;
-				this.waterY = y + radius;
 				this.waterV = v;
 			}
 			
-			if(this.drop){
+			if(this.drop && number%2 === 0 && number !== 0 & number !== upperWaterArr.length-1){
 				this.waterY += this.waterV;
 				this.waterV += this.waterV/10;
+				
+				this.watertop = this.waterY - this.waterradius;
+				this.waterbottom = this.waterY + this.waterradius;
+				this.waterleft = this.waterX - this.waterradius;
+				this.waterright = this.waterX + this.waterradius;
+				if(this.waterY < canvas.height/3){
+					this.waterline();
+				};
 				this.waterdrop();
 			}
 			
 			this.bottomPoint = this.y + this.radius;
-			
 			this.draw();
 			
 		}
@@ -218,8 +276,8 @@ function contextSetup(){
 	for(var x=0, i=0; x < canvas.width;i++, x+=space){
 		var velocity = v;
 		var radiussize = (Math.random()*max)+radius;
-	
-		upperWaterArr.push(new createupperWater(x ,0 , radiussize, velocity,y,radius,max,i));
+		console.log(i);
+		upperWaterArr.push(new createupperWater(x ,0 , radiussize, velocity,y,max,i));
 	}
 	
 	for(var x=0; x < canvas.width; x+=space){
@@ -240,13 +298,16 @@ console.log(upperWaterArr);
 
 
 function Contentsdraw(){
-
-			for(var i=0; i < fogArr.length; i++){
+	
+		for(var i=0; i < fogArr.length; i++){
 			fogArr[i].update();		
 		}
 
-
-		upperWaterArr.forEach((water,index)=>{		
+//		for(var i=0; i< upperWaterArr.length; i++){
+//			upperWaterArr[i].update();
+//		}
+	
+	upperWaterArr.forEach((water,index)=>{		
 			water.update();
 		})
 	
@@ -254,30 +315,32 @@ function Contentsdraw(){
 	var now = null;
 	var cpx, cpy = null;	
 	
-	ctx.fillStyle = "rgba(30,50,90,1)";
+	ctx.fillStyle = "rgba(30,50,90,0.1)";
 	ctx.moveTo(0,0);
-	ctx.lineTo(prev.x,prev.bottomPoint);
+	ctx.lineTo(prev.x,prev.y+20);
 	
 		
 		
-		for(var i=1; i<upperWaterArr.length;i++){
+		for(var i=1; i<upperWaterArr.length;i+=2){
 			now = upperWaterArr[i];
+			
+
 			cpx = (prev.x + now.x) /2;
-			cpy = (prev.bottomPoint + now.bottomPoint) /1.5;
+			cpy = (prev.bottomPoint + now.bottomPoint) /2;
 			
 			ctx.quadraticCurveTo(cpx,cpy,now.x,now.bottomPoint);
 			//ctx.lineTo(now.x,now.bottomPoint);
-			prev = now;
+			prev =  upperWaterArr[i+1];
 			
 		}
 		ctx.lineTo(canvas.width,upperWaterArr[0].bottomPoint);
 		ctx.lineTo(canvas.width,0);
-		//ctx.strokeStyle = "black";
-		//ctx.stroke();
+		ctx.strokeStyle = "black";
+		ctx.stroke();
 		ctx.fill();
 
 	}
-const play = new Contentsdraw();
+
 
 function SpongeBox(){
 		
@@ -334,9 +397,9 @@ function animate(){
 	ctx.fillText("기존 도형에 포인트를 몇개 더 추가하여 모양을 다듬어보자.", 100,200);    
 	ctx.fillText("너무 둥글둥글한 원만 있으니 이게 뭔지를 도통 알아보기가 힘들다.", 100,240);    
 
-	ctx.fillText("ㅁㄴ",100,280);  
-	ctx.fillText(".",100,320);  
-	ctx.fillText(".",100,360);
+	ctx.fillText("아직 제작중이지만 모양을 조금 더 추가하는건 생각보다 복잡하다.",100,280);  
+	ctx.fillText("더 자연스러운 모션을 가지려면 실시간으로 변하는도형의 버텍스 좌표값을",100,320);  
+	ctx.fillText("고려해야하는데 여기서 어떻게 엄청나게 자연스러운 커브를 그릴 수 있을까...",100,360);
 	
 	Contentsdraw();
 	
@@ -345,4 +408,5 @@ function animate(){
 
 }
 
+console.log(0%2)
 animate();
