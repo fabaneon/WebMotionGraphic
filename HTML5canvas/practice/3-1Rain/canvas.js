@@ -40,7 +40,7 @@ for (var i = 0; i < canvas.width; i+=space) {
 	
 
 }
-var constant = 15;
+var constant = 20;
 
 
 
