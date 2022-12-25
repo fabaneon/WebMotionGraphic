@@ -59,6 +59,7 @@ window.addEventListener("resize", function(){
 		this.radius = radius/2;
 		this.v = v/2;
 		this.t = t;
+		this.bottomPoint = this.y + this.radius;
 		
 		
 		this.drop = false;
@@ -69,16 +70,21 @@ window.addEventListener("resize", function(){
 		this.waterAlpha = 0;
 		this.waterV = v;
 		
+		
 		console.log(v);
 		
 		let setRdadius = radius;
 		
 		this.draw = function (){
-			ctx.fillStyle = "rgba(20,0,200,1)"
+			ctx.fillStyle = "rgba(20,0,200,0.1)"
 			ctx.beginPath();
 			ctx.arc(this.x,this.y,this.radius,0,Math.PI*2,false);
 			ctx.fill();
-			
+
+			ctx.fillStyle = "red";
+			ctx.beginPath();
+			ctx.arc(this.x,this.bottomPoint,1,0,Math.PI*2,false);
+			ctx.fill();
 		}
 		this.waterdrop = function(){
 			ctx.fillStyle = "rgba(60,70,250,1)"
@@ -119,7 +125,7 @@ window.addEventListener("resize", function(){
 				this.waterdrop();
 			}
 			
-			
+			this.bottomPoint = this.y + this.radius;
 			
 			this.draw();
 			
@@ -232,16 +238,46 @@ console.log(upperWaterArr);
 
 
 
+
 function Contentsdraw(){
+
+			for(var i=0; i < fogArr.length; i++){
+			fogArr[i].update();		
+		}
+
+
+		upperWaterArr.forEach((water,index)=>{		
+			water.update();
+		})
 	
-	for(var i=0; i < fogArr.length; i++){
-		fogArr[i].update();		
-	}
-	upperWaterArr.forEach((water,index)=>{
-		water.update();
-	})
+	var prev = upperWaterArr[0];
+	var now = null;
+	var cpx, cpy = null;	
+	
+	ctx.fillStyle = "rgba(30,50,90,0.8)";
+	ctx.moveTo(0,0);
+	ctx.lineTo(prev.x,prev.bottomPoint);
+	
 		
-}
+		
+		for(var i=1; i<upperWaterArr.length;i++){
+			now = upperWaterArr[i];
+			cpx = (prev.x + now.x) /2;
+			cpy = (prev.bottomPoint + now.bottomPoint) /1.5;
+			
+			ctx.quadraticCurveTo(cpx,cpy,now.x,now.bottomPoint);
+			//ctx.lineTo(now.x,now.bottomPoint);
+			prev = now;
+			
+		}
+		ctx.lineTo(canvas.width,upperWaterArr[0].bottomPoint);
+		ctx.lineTo(canvas.width,0);
+		ctx.strokeStyle = "black";
+		ctx.stroke();
+		ctx.fill();
+
+	}
+const play = new Contentsdraw();
 
 function SpongeBox(){
 		
@@ -292,17 +328,15 @@ function animate(){
 	ctx.fillStyle = "black"
 
 	ctx.font = "bold 24px Arial";
-	ctx.fillText("Step.3 사실적인 물표현", 100,120);    
+	ctx.fillText("Step.4 Shape 표현 구체화", 100,120);    
 
 	ctx.font = "bold 12px Arial";
-	ctx.fillText("이번엔 MetaBall 효과를 구현해볼것이다.", 100,200);    
-	ctx.fillText("액체끼리 맞붙었을때 끈적한듯 점성이 있는 모습을 표현하는 기법이다..", 100,240);    
+	ctx.fillText("기존 도형에 포인트를 몇개 더 추가하여 모양을 다듬어보자.", 100,200);    
+	ctx.fillText("너무 둥글둥글한 원만 있으니 이게 뭔지를 도통 알아보기가 힘들다.", 100,240);    
 
 	ctx.fillText("ㅁㄴ",100,280);  
-	ctx.fillText("복잡하게 구현했는데 이번엔 의외로 단순하게 작업했다.",100,320);  
-	ctx.fillText("처음 contextsetup에서 만드는 upperwaterArr 속 createuppderwater 함수에다",100,360);
-	ctx.fillText("개별 this.waterdrop 요소를 추가해준 후 지역변수 boolean값으로 이를 조정하는것",100,380);  
-	ctx.fillText("이 물방울은 화면밖으로 나가면 사라지며 중간에 스폰지에 닿아도 사라진다.",100,400); 
+	ctx.fillText(".",100,320);  
+	ctx.fillText(".",100,360);
 	
 	Contentsdraw();
 	
@@ -310,4 +344,5 @@ function animate(){
 	
 
 }
+
 animate();

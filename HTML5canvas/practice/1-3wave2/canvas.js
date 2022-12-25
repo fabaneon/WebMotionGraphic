@@ -92,8 +92,6 @@ function createwave(wavenum,r,g,b,alpha){
     let curve = wave[0];
     let prev = curve;
 	ctx.moveTo(0, canvas.height/2);
-	let prevcpx = curve.x;
-	let prevcpy = curve.y;
 	
 	
 
@@ -125,8 +123,6 @@ function createwave(wavenum,r,g,b,alpha){
             curve.vy = -curve.vy;
         }
 		prev = curve;
-		prevcpx = cx;
-		prevcpy = cy;
     }
 
 
