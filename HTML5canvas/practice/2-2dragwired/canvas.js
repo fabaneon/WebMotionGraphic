@@ -32,6 +32,8 @@ window.addEventListener("mousemove",
     function(event){
         mouse.x = event.clientX - canvas.offsetLeft + window.scrollX;
         mouse.y = event.clientY - canvas.offsetTop + window.scrollY;
+		console.log(mouse.x +" / " + mouse.y + ' / ' + mouse.drag);
+
 	// 이 부분에서 shape를 움직여야 한다. 그래야 클릭중에 움직이지 않는 상태를 shape가 인지할 수 있다. 
 	}
 )
@@ -165,8 +167,12 @@ function animate(){
 	ctx.fillText("지금은 contact라는 bolean값을 추가하여 범위를 벗어나도 드래그가 유지된다.",100,320);  
 	ctx.fillText("하지만 커서가 멈췄을때 movedXY값이 여전히 상수로 남아있어 shape가 계속 움직인다.",100,360);
 	ctx.fillText("이를 해결하기위해 여전히 작업중...",100,380); 
-	ctx.fillText("코드 하단에 주석으로 참고 레퍼런스를 첨부해두었다.",100,440);  
-	ctx.fillText("자세한것은 F12 -> Source || 주석 확인",100,400);  
+	ctx.fillText("이제 상대위치에서도 자연스럽게 움직이는 드래그 모션을 만들었다.",100,420); 
+	ctx.fillText("마우스가 움직이는 정도를 계속 더하는것보다",100,440); 
+	ctx.fillText("그냥 클릭했을때 객체 X,Y 기준 마우스 좌표값의 거리를 저장하여",100,460); 
+	ctx.fillText("차이를 두면 될것을 왜 어렵게 생각했을까 ㅋㅋ",100,480); 
+	ctx.fillText("코드 하단에 주석으로 참고 레퍼런스를 첨부해두었다.",100,500);  
+	ctx.fillText("자세한것은 F12 -> Source || 주석 확인",100,520);  
 	
 	//https://ko.javascript.info/mouse-drag-and-drop
 
