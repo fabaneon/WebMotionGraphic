@@ -195,9 +195,6 @@ function animate(){
 	ctx.fillText("disY의 길이가 충족되었을땐 gravity를 증가시키지 않는다.",100,380);
 	ctx.fillText("여기서 이 gravity 변수에 / (mouse.y - yp) 한 값으로 ... 일단 그렇다.",100,400); 
 	ctx.fillText("현재 작업중. 머리 아프넹",100,420); 
-
-	
-	
 };
 
 animate();
