@@ -119,9 +119,9 @@ function createwave(wavenum,r,g,b,alpha){
 		if(i === 1){
 			wave[0].t += curve.vy;
 		}
-        if(curve.y > canvas.height/2 + 30 || curve.y < canvas.height/2 -30){
-            curve.vy = -curve.vy;
-        }
+        // if(curve.y > canvas.height/2 + 30 || curve.y < canvas.height/2 -30){
+        //     curve.vy = -curve.vy;
+        // }
 		prev = curve;
     }
 
