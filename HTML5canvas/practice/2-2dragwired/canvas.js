@@ -7,24 +7,16 @@ let mouse = {
 	x: null,
 	y: null,
 	drag: false,
-	startx: null,
-	starty: null,
-	movedx: null,
-	movedy: null,
 	
 	
 	down: function(event) {
 		event.preventDefault();
-		mouse.movedx = 0;
-		mouse.movedy = 0;
 		mouse.drag = true;
 		console.log("mouse drag  " + mouse.drag);
 	},
 	
 	up: function(event) {
 		event.preventDefault();
-		mouse.movedx = 0;
-		mouse.movedy = 0;
 		mouse.drag = false;
 		console.log("mouse drag  " + mouse.drag);
 	},
@@ -40,11 +32,7 @@ window.addEventListener("mousemove",
     function(event){
         mouse.x = event.clientX - canvas.offsetLeft + window.scrollX;
         mouse.y = event.clientY - canvas.offsetTop + window.scrollY;
-		mouse.movedx = mouse.x - mouse.startx;
-		mouse.movedy = mouse.y - mouse.starty;
 	// 이 부분에서 shape를 움직여야 한다. 그래야 클릭중에 움직이지 않는 상태를 shape가 인지할 수 있다. 
-		mouse.startx = mouse.x;
-		mouse.starty = mouse.y;
 	}
 )
 
@@ -52,10 +40,13 @@ var ctx = canvas.getContext('2d');
 
 
 /** 사각형 객체범위에서 마우스포인터가 클릭한 지점을 표시 */
-function point(x,y,radius) {
+function point(x,y,radius,cx,cy) {
 	this.radius = radius
 	this.x = x;
 	this.y = y;
+	this.cx = x;
+	this.cy = y;
+	
 	
 	this.draw = function(){
 		ctx.beginPath();
@@ -64,9 +55,8 @@ function point(x,y,radius) {
 		ctx.stroke();
 	}
 	this.update = function(){
-							
-		this.x += mouse.movedx + mouse.movedx/3;
-		this.y += mouse.movedy + mouse.movedy/3;
+		this.x = this.cx;
+		this.y = this.cy;
 		this.draw();
 	}
 }
@@ -74,6 +64,8 @@ function point(x,y,radius) {
 function CreateRect(x,y,vx,vy,size,r,g,b){
 	this.x = x;
 	this.y = y;
+	this.cx = this.x;
+	this.cy = this.y;
 	this.vx = vx;
 	this.vy = vy;
 	this.size = size;
@@ -83,7 +75,6 @@ function CreateRect(x,y,vx,vy,size,r,g,b){
 		ctx.beginPath();
 		
 		ctx.moveTo(this.x-this.size,this.y+this.size);
-		
 		ctx.lineTo(this.x+this.size,this.y+this.size);
 		ctx.lineTo(this.x+this.size,this.y-this.size);
 		ctx.lineTo(this.x-this.size,this.y-this.size);
@@ -100,7 +91,12 @@ function CreateRect(x,y,vx,vy,size,r,g,b){
 		if (mouse.x > this.x-this.size && mouse.x < this.x + this.size &&
 			mouse.y > this.y-this.size && mouse.y < this.y + this.size){
 			if(mouse.drag){
-				this.contact = true;	
+				this.contact = true;
+				
+			}
+			else{
+				this.cx = this.x - mouse.x;
+				this.cy = this.y - mouse.y;
 			}
 		}
 		if(!mouse.drag){
@@ -108,8 +104,13 @@ function CreateRect(x,y,vx,vy,size,r,g,b){
 		}
 		if(this.contact){
 					
-					this.x += mouse.movedx + mouse.movedx/3;
-					this.y += mouse.movedy + mouse.movedy/3;
+					// point.cx = mouse.x + this.cx; 
+					// point.cy = mouse.y + this.cy ;
+		
+					
+				
+					this.x = mouse.x + this.cx;
+					this.y = mouse.y + this.cy;
 					// this.x = mouse.x;
 					// this.y = mouse.y;
 					// 이러면 참 편하겠지만.. 이건 퍼포먼스가 전혀 없다.
@@ -163,8 +164,11 @@ function animate(){
 	ctx.fillText("기존 shape 범위 내 있을때만 드래그가 적용되었다면",100,280);  
 	ctx.fillText("지금은 contact라는 bolean값을 추가하여 범위를 벗어나도 드래그가 유지된다.",100,320);  
 	ctx.fillText("하지만 커서가 멈췄을때 movedXY값이 여전히 상수로 남아있어 shape가 계속 움직인다.",100,360);
-	ctx.fillText("이를 해결하기위해 여전히 작업중...",100,380);  
+	ctx.fillText("이를 해결하기위해 여전히 작업중...",100,380); 
+	ctx.fillText("코드 하단에 주석으로 참고 레퍼런스를 첨부해두었다.",100,440);  
 	ctx.fillText("자세한것은 F12 -> Source || 주석 확인",100,400);  
+	
+	//https://ko.javascript.info/mouse-drag-and-drop
 
 
 }
