@@ -20,7 +20,7 @@ function Text(str,x,y,density) {
 
 		ctx.clearRect(x,y,canvas.width,canvas.height);
 		
-		ctx.font = 'bold '+100+'px aria';
+		ctx.font = 'bold '+this.fontSize+'px aria';
 		ctx.fillStyle = 'rgba(0,0,0,0.3)';
 		ctx.textBaseline = 'middle';
 		const fontPos = ctx.measureText(str);
@@ -29,11 +29,11 @@ function Text(str,x,y,density) {
 		const fontBtm = fontPos.actualBoundingBoxDescent;
 		const fontSize = fontPos.width;
 		//ctx.textAlign = 'center';
-		for (var i = this.stageWidth; i < this.stageWidth+fontSize; i+=15){
+		for (var i = this.stageWidth; i < this.stageWidth+fontSize; i+=5){
 			ctx.fontWidth = 0.1;
-			ctx.moveTo(i,this.stageHeight);
-			ctx.lineTo(i,this.stageHeight+this.fontSize);
-			ctx.strokeStyle = 'rgba(0,100,200,0.01)';
+			ctx.moveTo(i,this.stageHeight-fontTop);
+			ctx.lineTo(i,this.stageHeight+fontBtm);
+			ctx.strokeStyle = 'rgba(0,100,200,1)';
 			ctx.stroke();
 			//console.log(i);
 		}
