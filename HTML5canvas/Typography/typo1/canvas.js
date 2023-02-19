@@ -5,9 +5,8 @@ canvas.height = window.innerHeight;
 
 const ctx = canvas.getContext('2d');
 
-const viewXCenter = canvas.width/7
-const viewYCenter = canvas.height/5*0.8
-function Text(str,x,y,density) {
+
+function Text(str,density) {
 	
 	this.fontWidth = canvas.width/2;
 	this.fontSize = 400;
@@ -93,7 +92,7 @@ function Text(str,x,y,density) {
 	}
 }
 
-const drawing = new Text('g',viewXCenter,viewYCenter,50);
+const drawing = new Text('M',50);
 
 function draw(){
 	requestAnimationFrame(draw);
