@@ -20,17 +20,13 @@ function Text(str,density) {
 									   fontY+fontBtm).data;
 		const particles = [];
 		let i =0;
-		let width = 0;
+		var width = 0;
 		let pixel;
 		for(let height = 0; height < this.stageHeight; height += density){
 			++i;
-			const slide = (i%2) ==0;
-			width = 0;
-			if(slide == 1){
-				width +=6;
-			}
-			for(width; width < this.stageWidth; width+= density){
-				pixel = imageData[((width +(height * this.stageWidth))*4)-1];
+			
+			for(var width = 0,a = 0; a < imageData.length; width+= density,a++){
+				pixel = imageData[i];
 				if(pixel !=0 && width > 0 && width < this.stageWidth && height > 0  && height< this.stageHeight){
 					particles.push({
 						x: width,
