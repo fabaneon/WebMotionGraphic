@@ -19,23 +19,27 @@ function Text(str,density) {
 									   fontX+fontWidth,
 									   fontY+fontBtm).data;
 		const particles = [];
-		let i =0;
-		var width = 0;
 		let pixel;
-		for(let height = 0; height < this.stageHeight; height += density){
-			++i;
-			
-			for(var width = 0,a = 0; a < imageData.length; width+= density,a++){
-				pixel = imageData[i];
-				if(pixel !=0 && width > 0 && width < this.stageWidth && height > 0  && height< this.stageHeight){
-					particles.push({
-						x: width,
-						y: height,
-					});
-				}
-			}
-		}
-		return particles;
+		for(var i = 0; i < imageData.length;i+=4){
+				imageData[i] = 255 - imageData[i];
+                imageData[i+1] = 255 - imageData[i+1];
+                imageData[i+2] = 255 - imageData[i+2];
+
+				var pixel1 = imageData[i];
+                var pixel2 = imageData[i+1];
+                var pixel3 = imageData[i+2];
+                var pixel4 = imageData[i+3];
+		        
+                particles.push({
+                   r: pixel1, 
+                   g: pixel2, 
+                   b: pixel3, 
+                   a: pixel4, 
+                });
+        }
+        return particles
+        
+		
 	}
 	
 	this.draw = function() {
@@ -55,6 +59,7 @@ function Text(str,density) {
 		ctx.fillText(str,fontX, fontY);
 
 		var dotPoint = this.dotPos(fontX,fontY,fontTop,fontBtm,fontWidth);
+        console.log(dotPoint[1]);
 		// ctx.fontWidth = 0.1;
 		// ctx.strokeStyle = 'rgba(0,100,200,1)';
 
@@ -69,16 +74,21 @@ function Text(str,density) {
 		// ctx.strokeStyle = 'black';
 		// ctx.arc(fontX,fontY-fontTop,5,0,Math.PI*2,false);
 		// ctx.stroke()
+        for(var x = fontX; x < fontWidth; x+=10){
+            for(var check = 0,y = fontY-fontTop; check < dotPoint.length; check++, y+=10){
+                    var r = dotPoint[check].r;
+                    var g = dotPoint[check].g;
+                    var b = dotPoint[check].b;
+                    var a = dotPoint[check].a;
 
-		for(var check = 0; check < dotPoint.length; check++){
-				var dotX = dotPoint[check].x;
-				var dotY = dotPoint[check].y;
-				
-				ctx.beginPath();
-				ctx.strokeStyle = 'red';
-				ctx.arc(dotX,dotY,5,0,Math.PI*2,false);
-				ctx.stroke()
-		}
+                    ctx.beginPath();
+                    ctx.fillStyle = 'rgba('+r+','+g+','+b+','+a+')';
+                    ctx.strokeStyle = 'rgba('+r+','+g+','+b+','+a+')';
+                    ctx.arc(x,y,1,0,Math.PI*2,false);
+                    ctx.fill();
+                    ctx.stroke()
+            }
+        }
 
 		
 		// ctx.beginPath();
