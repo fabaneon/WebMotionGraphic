@@ -57,6 +57,7 @@ function animate(){
             }
         }   
     
+    
     data = particles;
     for(var abs = 0; abs < particles.length; abs++){
         ctx.beginPath();
