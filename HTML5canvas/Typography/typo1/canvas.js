@@ -7,54 +7,81 @@ const ctx = canvas.getContext('2d');
 
 var show = null;
 var voke = null;
-function Text(str,density) {
+function Text(str,density,stageX,stageY) {
 	
-	this.fontWidth = canvas.width/2;
+	this.fontWidth = 200;
 	this.fontSize = 300;
 	
-	this.stageWidth = canvas.width;
-	this.stageHeight = canvas.height;
+	this.stageWidth = stageX;
+	this.stageHeight = stageY;
+    this.density = density;
 	this.dotPos = function(fontX,fontY,fontTop,fontBtm,fontWidth){
             
 			const imageData = ctx.getImageData(fontX,
 								   fontY-fontTop,
-									   fontX+fontWidth,
-									   fontTop+fontBtm);
+									   fontWidth,
+									   fontTop+fontBtm).data;
         voke = imageData;
-        
-        imageData[0] = 255;
-        imageData[4] = 255;
-        imageData[8] = 255;
-        imageData[16] = 255;
-        imageData[20] = 255;
-		const particles = [];
-		let pixel;
-        let i = 0;
-        const density = 15;
-        const arrDen = density*4;
-        // for(var x1 = fontX; x1 < fontX+fontWidth; x1+=density){
-        //     for(var y1 = fontY-fontTop; y1 < fontY+fontBtm; y1+=density){
-        //                 var r = imageData[i];
-        //                 var g = imageData[i+1];
-        //                 var b = imageData[i+2];
 
-        //             if(r !== 255 && g !== 255 && b !== 255){                        
-        //                 particles.push({
-        //                     x: x1,
-        //                     y: y1,
-        //                     r: r,
-        //                     g: g,
-        //                     b: b,
-        //                 });
-        //             i+=arrDen;
-                    
-                    
-        //         }
+        
+        
+        
+        const particles = [];
+        var pixel;
+        var i = 0;
+        for( var y = fontY-fontTop; y < fontY+fontBtm; y += this.density){
+            for( var x = fontX; x < fontX+fontWidth; x+= this.density){
+                i += 4;
+                pixel = imageData[(x+y)*4];
                 
-        //     }
+               //console.log(pixel);
+                if((pixel === 255)&&
+                  x > fontX && x < fontX+fontWidth &&
+                  y > fontY-fontTop && y < fontY-fontBtm){
+                    particles.push({
+                        x: x,
+                        y: y
+                        
+                    })
+                }
+            }
+        }   
+        
+        
+//         let width = 0;
+//         let i = 0;
+//         let pixel;
+        
+        
+//         for(let height = fontY-fontTop; height < fontY+fontBtm; height += density){
+//             ++i;
+//             const slide = (i%2) == 0;
+//             width = fontX;
+//             if(slide ==1){
+//                 width +=6;
+//             }
             
-        // }
-        ctx.putImageData(imageData,fontX,fontY-fontTop);
+//             for(width; width < fontX+fontWidth; width+= density){
+//                 pixel = imageData[(width + (height * fontX+fontWidth) *4)-1];
+//                 if((pixel === 255) &&
+//                   width > fontX &&
+//                   width < fontX+fontWidth &&
+//                   height > fontY-fontTop &&
+//                   height < fontY+fontBtm){
+//                     particles.push({
+//                         x: width,
+//                         y: height
+                        
+//                     })
+//                 }
+                    
+                
+//             }
+            
+            
+            
+//         }
+        
         return particles;
         
 		
@@ -67,7 +94,7 @@ function Text(str,density) {
 
         
 		ctx.font = 'bold '+this.fontSize+'px aria';
-		ctx.fillStyle = 'blue';
+		ctx.fillStyle = 'red';
 		const fontPos = ctx.measureText(str);
 		const fontTop = fontPos.actualBoundingBoxAscent;
 		const fontBtm = fontPos.actualBoundingBoxDescent;
@@ -75,9 +102,12 @@ function Text(str,density) {
 		const fontX = (this.stageWidth - fontPos.width)/2;
 		const fontY = (this.stageHeight - this.fontSize)/2+fontTop+fontBtm;
 
-        ctx.textBaseline = 'top';
+        //ctx.textBaseline = 'top';
         //ctx.textAlign = 'start';
-		ctx.fillText(str,fontX, fontY-fontBtm);
+		ctx.fillText(str,(this.stageWidth - fontPos.width) /2, 
+                     fontPos.actualBoundingBoxAscent + 
+                    fontPos.actualBoundingBoxDescent +
+                    ((this.stageHeight - this.fontSize) /2));
 
         
         //ctx.fillRect(200,200,350,350);
@@ -98,21 +128,21 @@ function Text(str,density) {
 		// ctx.strokeStyle = 'black';
 		// ctx.arc(fontX,fontY-fontTop,5,0,Math.PI*2,false);
 		// ctx.stroke()
-            // for(var i = 0; i < dotPoint.length; i++){
-            //         var r = '200';
-            //         var g = '200';
-            //         var b = '200';
-            //         var a = '1';
+            for(var i = 0; i < dotPoint.length; i++){
+                    var r = '200';
+                    var g = '200';
+                    var b = '200';
+                    var a = '1';
 
                     
                 
-            //         ctx.beginPath();
-            //         ctx.fillStyle = 'red';
-            //         ctx.strokeStyle = 'rgba('+r+','+g+','+b+','+a+')';
-            //         ctx.arc(dotPoint[i].x,dotPoint[i].y,2,0,Math.PI*2,false);
-            //         ctx.fill();
-            //         ctx.stroke()
-            // }
+                    ctx.beginPath();
+                    ctx.fillStyle = 'blue';
+                    ctx.strokeStyle = 'rgba('+r+','+g+','+b+','+a+')';
+                    ctx.arc(dotPoint[i].x,dotPoint[i].y,2,0,Math.PI*2,false);
+                    ctx.fill();
+                    ctx.stroke()
+            }
 
 		
 		// ctx.beginPath();
@@ -122,7 +152,9 @@ function Text(str,density) {
 	}
 }
 
-const drawing = new Text('M',50);
+const drawing = new Text('M',2,
+                        document.body.clientWidth,
+                        document.body.clientHeight);
 
 function draw(){
 	requestAnimationFrame(draw);
