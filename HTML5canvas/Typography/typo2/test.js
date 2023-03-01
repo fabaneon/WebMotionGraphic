@@ -89,7 +89,7 @@ function Particles(x,y){
 
         if (dist < mouse.radius){
             this.x -= directionX;
-            this.y -+ directionY;
+            this.y -= directionY;
         } 
         else{
             if(this.x !== this.baseX){
