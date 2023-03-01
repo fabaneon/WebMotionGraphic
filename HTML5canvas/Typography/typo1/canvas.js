@@ -102,8 +102,8 @@ function Text(str,density,stageX,stageY) {
 		const fontX = (this.stageWidth - fontPos.width)/2;
 		const fontY = (this.stageHeight - this.fontSize)/2+fontTop+fontBtm;
 
-        //ctx.textBaseline = 'top';
-        //ctx.textAlign = 'start';
+        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'start';
 		ctx.fillText(str,(this.stageWidth - fontPos.width) /2, 
                      fontPos.actualBoundingBoxAscent + 
                     fontPos.actualBoundingBoxDescent +
@@ -112,7 +112,7 @@ function Text(str,density,stageX,stageY) {
         
         //ctx.fillRect(200,200,350,350);
         var dotPoint = this.dotPos(fontX,fontY,fontTop,fontBtm,fontWidth);
-        show = dotPoint;
+        show = fontTop;
         
         // ctx.fontWidth = 0.1;
 		// ctx.strokeStyle = 'rgba(0,100,200,1)';
@@ -124,10 +124,10 @@ function Text(str,density,stageX,stageY) {
 		// ctx.stroke();
 		// }
 		
-		// ctx.beginPath();
-		// ctx.strokeStyle = 'black';
-		// ctx.arc(fontX,fontY-fontTop,5,0,Math.PI*2,false);
-		// ctx.stroke()
+		ctx.beginPath();
+		ctx.strokeStyle = 'black';
+		ctx.arc(fontX,fontY-fontTop,5,0,Math.PI*2,false);
+		ctx.stroke()
             for(var i = 0; i < dotPoint.length; i++){
                     var r = '200';
                     var g = '200';

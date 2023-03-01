@@ -22,8 +22,8 @@ function animate(){
         btm: ctx.measureText(str).actualBoundingBoxDescent,
         width: ctx.measureText(str).width,        
     };
-    const fontX = 0;
-    const fontY = 0+fontPos.top+fontPos.btm; 
+    const fontX = 50;
+    const fontY = 50+fontPos.top+fontPos.btm; 
     ctx.font = 'bold '+fontSize+'px Verdana';
     ctx.textBaseline="middle"; 
     ctx.fillText(str, fontX, fontY);
@@ -66,10 +66,10 @@ function animate(){
         ctx.arc(particles[abs].x,particles[abs].y,4,0,Math.PI*2,false);
         ctx.stroke()   
     }
-	// ctx.arc(fontX,fontY+fontPos.btm,5,0,Math.PI*2,false);
-	// ctx.arc(fontX,fontY-fontPos.top,5,0,Math.PI*2,false);
-	// ctx.arc(fontX,fontY,5,0,Math.PI*2,false);
-//    ctx.stroke()
+	//ctx.arc(fontX,fontY+fontPos.btm,5,0,Math.PI*2,false);
+	//ctx.arc(fontX,fontY-fontPos.top,5,0,Math.PI*2,false);
+	ctx.arc(fontX,fontY,5,0,Math.PI*2,false);
+	ctx.stroke()
     
 
     

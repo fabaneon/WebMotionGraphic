@@ -5,16 +5,12 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 
-let particleArr = [];
-let adjustX= 6;
-let adjustY = 0;
-ctx.lineWidth = 3;
 
 
 let mouse = {
     x:null,
     y:null,
-    radius: 120
+    radius: 100
     
 }
 
@@ -23,11 +19,45 @@ window.addEventListener('mousemove', function(event){
     mouse.y = event.clientY - canvas.offsetTop + window.scrollY;
 })
 
+let particleArr = [];
+ctx.lineWidth = 3;
 
-ctx. fillStyle = 'white';
-ctx.font = '25px Verdana';
-ctx.fillText('A',0,30);
-const textCoordinates = ctx.getImageData(0,0,100,100);
+const str = 'F';
+const fontSize = 800;
+//let color;
+
+
+
+ctx.textBaseline = 'middle';
+ctx.textAlign = 'start';
+ctx.font = 'bold '+fontSize+'px aira';
+
+const Adjustdensity = 20;
+const stageX = document.body.clientWidth;
+const stageY = document.body.clientHeight;
+
+const fontPos = ctx.measureText(str);
+const fontPosWidth = fontPos.width;
+const fontPosTop = fontPos.actualBoundingBoxAscent;
+const fontPosBtm = fontPos.actualBoundingBoxDescent;
+
+const fontX = (stageX - fontPosWidth)/2;
+const fontY = (stageY - fontSize)/2 +fontPosTop + fontPosBtm;
+
+
+let adjustX= fontX;
+let adjustY = fontY-fontPosTop;
+
+
+console.log(fontY);
+console.log(fontPosTop);
+
+ctx.fillText(str,fontX,fontY);
+const textCoordinates = ctx.getImageData(fontX,fontY-fontPosTop,fontX+fontPosWidth,fontY+fontPosBtm);
+
+
+
+
 
 function Particles(x,y){
     this.x = x;
@@ -35,14 +65,14 @@ function Particles(x,y){
     this.size = 3;
     this.baseX = this.x;
     this.baseY = this.y;
-    this.desnity = (Math.random()*40)+5;
+    this.density = 50;
     
     this.draw = function(){
-        ctx.fillStyle = 'white;'
+        ctx.fillStyle = 'white'
         ctx.beginPath();
         ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
-        ctx.closePath();
         ctx.fill();
+        ctx.closePath();
     }
     
     this.update = function(){
@@ -53,6 +83,7 @@ function Particles(x,y){
         let forceDirectionY = dy / dist;
         let maxDist = mouse.radius;
         let force = (maxDist - dist) / maxDist;
+        //color = forceDirectionX;
         let directionX = forceDirectionX * force * this.density;
         let directionY = forceDirectionY * force * this.density;
 
@@ -77,26 +108,79 @@ function Particles(x,y){
 
 function init(){
     particleArr = [];
-    for(let y = 0, y2 = textCoordinates.height; y< y2; y++){
-        for(let x = 0, x2 = textCoordinates.width; x < x2; x++){
+    for(let y = 0, y2 = textCoordinates.height; y < y2; y+=Adjustdensity){
+        for(let x = 0, x2 = textCoordinates.width; x < x2; x+=Adjustdensity){
             if (textCoordinates.data[(y * 4 * textCoordinates.width) + (x*4)+3]
-                < 128){
+                > 200){
                 let positionX = x + adjustX;
                 let positionY = y + adjustY;
-                particleArr.push(new Particles(positionX * 20, positionY * 20));
+                particleArr.push(new Particles(positionX * 1, 
+                                               positionY * 1));
             }
         }
     }
+    console.log(particleArr);
 }
 init();
 function animate(){
     requestAnimationFrame(animate);
     ctx.clearRect(0,0,canvas.width, canvas.height);
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'start';
+
+    ctx.font = 'bold '+fontSize+'px aira';
+
+    ctx.fillStyle = 'rgba(150,0,0,0.1)';
+    ctx.fillText(str,fontX,fontY);
+
     for (let i = 0; i < particleArr.length;i++){
         particleArr[i].draw();
-        //particleArr[i].update();
+        particleArr[i].update();
     }
-    //connect();
+    connect();
+
+    ctx.beginPath();
+    ctx.fillStyle = 'blue';
+    ctx.arc(fontX,fontY-fontPosTop,5,0,Math.PI*2);
+    ctx.fill();
+    ctx.closePath();
+
+    ctx.beginPath();
+    ctx.fillStyle = 'pink';
+    ctx.arc(fontX,fontY+fontPosBtm,5,0,Math.PI*2);
+    ctx.fill();
+    ctx.closePath();
+
+    ctx.beginPath();
+    ctx.fillStyle = 'red';
+    ctx.arc(fontX,fontY,5,0,Math.PI*2);
+    ctx.fill();
+    ctx.closePath();
+
+    
+    ctx.beginPath();
+    ctx.fillStyle = 'rgba(0,0,0,0)';
+    ctx.strokeStyle = 'green';
+    ctx.arc(mouse.x,mouse.y,mouse.radius,0,Math.PI*2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.closePath();
+
+    ctx.fillStyle = "skyblue"
+
+    ctx.font = "bold 48px Arial";
+    ctx.fillText("타이포 그래피 연구",100,120);    
+
+    ctx.font = "bold 24px Arial";
+    ctx.fillText("우선.. 아직 수식을 완전히 터득하진 못했다.",100,200);    
+    ctx.fillText("하지만 imageData를 어떻게 다뤄야할지는 이해한것같다.",100,240);    
+    ctx.fillText("TextMetrics 속성은 이제 어느정도 알게된듯.",100,280);    
+
+    ctx.fillText("파란것이 fontY - fontPosTop",100,320);    
+    ctx.fillText("빨간것이 fontY",100,360);    
+    ctx.fillText("핑크색이 fontY + fontPosBtm",100,400);    
+
+    
 }
 animate();
 
@@ -107,7 +191,7 @@ function connect(){
             let dx = particleArr[a].x - particleArr[b].x;
             let dy = particleArr[a].y - particleArr[b].y;
             let dist = Math.sqrt(dx*dx+dy*dy);
-            ctx.strokeStyle = 'rgba(255,255,255,'+opacityValue+')';
+            ctx.strokeStyle = 'rgba(255,'+dist+',255,'+opacityValue+')';
             if(dist < 50){
                 ctx.lineWidth = 2;
                 ctx.beginPath();
