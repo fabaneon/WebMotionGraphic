@@ -20,19 +20,19 @@ window.addEventListener('mousemove', function(event){
 })
 
 let particleArr = [];
-ctx.lineWidth = 3;
+ctx.lineWidth = 1;
 
-const str = 'F';
-const fontSize = 800;
+const str = 'HI';
+const fontSize = 600;
 //let color;
 
 
 
 ctx.textBaseline = 'middle';
 ctx.textAlign = 'start';
-ctx.font = 'bold '+fontSize+'px aira';
+ctx.font = 'bold '+fontSize+'px verdun';
 
-const Adjustdensity = 20;
+const Adjustdensity = 22;
 const stageX = document.body.clientWidth;
 const stageY = document.body.clientHeight;
 
@@ -134,7 +134,7 @@ function animate(){
     ctx.fillText(str,fontX,fontY);
 
     for (let i = 0; i < particleArr.length;i++){
-        particleArr[i].draw();
+        //particleArr[i].draw();
         particleArr[i].update();
     }
     connect();
