@@ -53,7 +53,8 @@ console.log(fontY);
 console.log(fontPosTop);
 
 ctx.fillText(str,fontX,fontY);
-const textCoordinates = ctx.getImageData(fontX,fontY-fontPosTop,fontX+fontPosWidth,fontY+fontPosBtm);
+const textCoordinates = ctx.getImageData(fontX,fontY-fontPosTop,fontX+fontPosWidth,
+                                         fontY+fontPosBtm);
 
 
 
@@ -66,6 +67,7 @@ function Particles(x,y){
     this.baseX = this.x;
     this.baseY = this.y;
     this.density = 50;
+    this.opacity = 1;
     
     this.draw = function(){
         ctx.fillStyle = 'white'
@@ -134,7 +136,7 @@ function animate(){
     ctx.fillText(str,fontX,fontY);
 
     for (let i = 0; i < particleArr.length;i++){
-        //particleArr[i].draw();
+        particleArr[i].draw();
         particleArr[i].update();
     }
     connect();
@@ -191,7 +193,9 @@ function connect(){
             let dx = particleArr[a].x - particleArr[b].x;
             let dy = particleArr[a].y - particleArr[b].y;
             let dist = Math.sqrt(dx*dx+dy*dy);
-            ctx.strokeStyle = 'rgba(255,'+dist+',255,'+opacityValue+')';
+            opacityValue = dist/100;
+            
+            ctx.strokeStyle = 'rgba(255,'+255+',255,'+opacityValue+')';
             if(dist < 50){
                 ctx.lineWidth = 2;
                 ctx.beginPath();
