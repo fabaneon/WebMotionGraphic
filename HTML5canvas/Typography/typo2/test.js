@@ -7,6 +7,7 @@ canvas.height = window.innerHeight;
 
 
 
+
 let mouse = {
     x:null,
     y:null,
@@ -19,46 +20,36 @@ window.addEventListener('mousemove', function(event){
     mouse.y = event.clientY - canvas.offsetTop + window.scrollY;
 })
 
-let particleArr = [];
-ctx.lineWidth = 1;
+    let particleArr = [];
+    let str = 'HI';
+    let fontSize = 600;
+    //let color;
+    let textSet = function(){
+        ctx.lineWidth = 1;
+        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'start';
+        ctx.font = 'bold '+fontSize+'px verdun';        
+    }
+    textSet();
+    let Adjustdensity = 22;
+    let stageX = document.body.clientWidth;
+    let stageY = document.body.clientHeight;
 
-const str = 'HI';
-const fontSize = 600;
-//let color;
+    let fontPos = ctx.measureText(str);
+    let fontPosWidth = fontPos.width;
+    let fontPosTop = fontPos.actualBoundingBoxAscent;
+    let fontPosBtm = fontPos.actualBoundingBoxDescent;
 
-
-
-ctx.textBaseline = 'middle';
-ctx.textAlign = 'start';
-ctx.font = 'bold '+fontSize+'px verdun';
-
-const Adjustdensity = 22;
-const stageX = document.body.clientWidth;
-const stageY = document.body.clientHeight;
-
-const fontPos = ctx.measureText(str);
-const fontPosWidth = fontPos.width;
-const fontPosTop = fontPos.actualBoundingBoxAscent;
-const fontPosBtm = fontPos.actualBoundingBoxDescent;
-
-const fontX = (stageX - fontPosWidth)/2;
-const fontY = (stageY - fontSize)/2 +fontPosTop + fontPosBtm;
+    let fontX = (stageX - fontPosWidth)/2;
+    let fontY = (stageY - fontSize)/2 +fontPosTop + fontPosBtm;
 
 
-let adjustX= fontX;
-let adjustY = fontY-fontPosTop;
+    let adjustX= fontX;
+    let adjustY = fontY-fontPosTop;
 
-
-console.log(fontY);
-console.log(fontPosTop);
-
-ctx.fillText(str,fontX,fontY);
-const textCoordinates = ctx.getImageData(fontX,fontY-fontPosTop,fontX+fontPosWidth,
-                                         fontY+fontPosBtm);
-
-
-
-
+    ctx.fillText(str,fontX,fontY);
+    let textCoordinates = ctx.getImageData(fontX,fontY-fontPosTop,fontX+fontPosWidth,
+                                             fontY+fontPosBtm);
 
 function Particles(x,y){
     this.x = x;
@@ -110,6 +101,37 @@ function Particles(x,y){
 
 function init(){
     particleArr = [];
+
+    str = 'HI';
+    fontSize = 600;
+    //color;
+    textSet = function(){
+        ctx.lineWidth = 1;
+        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'start';
+        ctx.font = 'bold '+fontSize+'px verdun';        
+    }
+    textSet();
+    Adjustdensity = 22;
+    stageX = document.body.clientWidth;
+    stageY = document.body.clientHeight;
+
+    fontPos = ctx.measureText(str);
+    fontPosWidth = fontPos.width;
+    fontPosTop = fontPos.actualBoundingBoxAscent;
+    fontPosBtm = fontPos.actualBoundingBoxDescent;
+
+    fontX = (stageX - fontPosWidth)/2;
+    fontY = (stageY - fontSize)/2 +fontPosTop + fontPosBtm;
+
+
+    adjustX= fontX;
+    adjustY = fontY-fontPosTop;
+
+    ctx.fillText(str,fontX,fontY);
+    textCoordinates = ctx.getImageData(fontX,fontY-fontPosTop,fontX+fontPosWidth,
+                                             fontY+fontPosBtm);
+
     for(let y = 0, y2 = textCoordinates.height; y < y2; y+=Adjustdensity){
         for(let x = 0, x2 = textCoordinates.width; x < x2; x+=Adjustdensity){
             if (textCoordinates.data[(y * 4 * textCoordinates.width) + (x*4)+3]
@@ -206,3 +228,8 @@ function connect(){
         }
     }
 }
+window.addEventListener('resize', function(event){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    init();
+})

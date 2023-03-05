@@ -66,6 +66,7 @@ function Text(str,density,stageX,stageY) {
                 }
             }
         }   
+    
         const lineDotArr = [];
 
         for (var i = 0; i < particles.length; i++){
